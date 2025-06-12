@@ -1,3 +1,6 @@
+# MEDICAL MANAGEMENT SYSTEM
+A project with FrontEnd, BackEnd and Database updates.
+
 # Svelte library
 
 Everything you need to build a Svelte library, powered by [`sv`](https://npmjs.com/package/sv).

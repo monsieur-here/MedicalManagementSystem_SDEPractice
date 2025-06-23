@@ -1,8 +1,8 @@
-<script>
+<script lang='js'>
   import { goto } from "$app/navigation";
-  import { page } from "$app/state";
+  import { page } from "$app/stores";
 
-  $: user_type = $page.url.searchParams.get("user_type");
+  $: user_type = $page.url.searchParams.get("user_type"); // Disable checkJs in jsconfig.json to avoid this error
   let name = "";
   let dateOfBirth = "";
   let gender = "";
@@ -14,22 +14,7 @@
   let loggedIn = false;
   console.log(user_type);
 
-  //     function handleLogin() {
-  // 	error = "";
-
-  // 	const requiredFieldsFilled =
-  // 		user_type === "Patient" || user_type === "$Patient"
-  // 			? name && dateOfBirth && gender && contact && address && email && password
-  // 			: name && dateOfBirth && gender && contact && address && email;
-
-  // 	if (!requiredFieldsFilled) {
-  // 		error = "Please fill in all fields.";
-  // 		return;
-  // 	}
-
-  // }
-
-  async function handleRegister(e) {
+  async function handleRegister(e) { // Disable checkJs in jsconfig.json to avoid this error
     error = "";
 
     const requiredFieldsFilled =
@@ -99,7 +84,7 @@
       email: data.get("email"),
       password: data.get("password"),
       address: data.get("address"),
-      //   patient_id: "",
+      //   patient_id: "",          ====> To be resolved
     };
 
     // console.log(data.get('full_name'));

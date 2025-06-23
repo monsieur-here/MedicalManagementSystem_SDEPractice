@@ -9,31 +9,86 @@
     let error = "";
     let loggedIn = false;
     
-    function handleLogin() {
-        error = "";
+    // function handleLogin() {
+    //     error = "";
 
+    //     if (!email || !password) {
+    //         error = "Please fill in all fields.";
+    //         return;
+    //     }
+	//     localStorage.setItem('user_type', user_type);
+    //     // Mock login check
+    //     if (user_type==="Patient" && email === "test@example.com" && password === "password") {
+    //         loggedIn = true;
+    //         console.log(user_type);
+
+    //         goto(`/dashboard?user_type=${user_type}`);
+    //     } 
+    //     else if(user_type==="Staff" && email === "test@example.com" && password === "password"){
+    //         loggedIn = true;
+    //         console.log(user_type);
+
+    //         goto(`/homepage?user_type=${user_type}`);
+    //     }
+    //     else {
+    //         error = "Invalid credentials.";
+    //     }
+    // }
+
+    async function handleLogin(e) {
+  	
         if (!email || !password) {
             error = "Please fill in all fields.";
             return;
         }
 	    localStorage.setItem('user_type', user_type);
-        // Mock login check
-        if (user_type==="Patient" && email === "test@example.com" && password === "password") {
-            loggedIn = true;
-            console.log(user_type);
+        const data = new FormData(e.currentTarget);
 
-            goto(`/dashboard?user_type=${user_type}`);
-        } 
-        else if(user_type==="Staff" && email === "test@example.com" && password === "password"){
-            loggedIn = true;
-            console.log(user_type);
 
-            goto(`/homepage?user_type=${user_type}`);
+        // To Do - Validate Email and Password
+
+        const validateLogin = {
+            email: data.get("email"),
+            password: data.get("password")
         }
-        else {
-            error = "Invalid credentials.";
-        }
+
+        // Added - Sending POST to backend
+        try {
+            const myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            //   const raw = JSON.stringify();
+
+            const requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: JSON.stringify(validateLogin),
+            };
+
+            const res = await fetch(
+                "http://localhost:8080/Understanding_Integration-Backend/patient/login",
+                requestOptions
+            );
+
+            console.log(res);
+
+            if (res.ok) {
+                alert("🎉 Login successfully done!");
+                loggedIn = true;
+                goto(`/dashboard?user_type=${user_type}`);
+                // goto(DOCTOR.DASHBOARD)
+            } else {
+                alert("Oops, something went wrong while creating new user ...!");
+
+                const text = await res.text();
+                error = `Login failed: ${text}`;
+            }
+            } catch (err) {
+                error = "Error connecting to server.";
+                console.error(err);
+            }
     }
+
 </script>
 
 {#if loggedIn}
@@ -42,16 +97,18 @@
     <h2 style="text-align: center;">Login</h2>
 
     <form on:submit|preventDefault={handleLogin}>
-        <select bind:value={user_type} required>
-		<option value="" disabled selected>Select User</option>
-		<option>Patient</option>
-		<option>Staff</option>
 
-	</select>
-        <input type="email" placeholder="Email" bind:value={email} required />
+        <select bind:value={user_type} required>
+            <option value="" disabled selected>Select User</option>
+            <option>Patient</option>
+            <option>Staff</option>
+	    </select>
+
+        <input type="email" placeholder="Email" name="email" bind:value={email} required />
         <input
             type="password"
             placeholder="Password"
+            name="password"
             bind:value={password}
             required
         />

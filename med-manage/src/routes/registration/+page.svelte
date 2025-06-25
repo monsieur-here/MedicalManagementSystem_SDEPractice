@@ -14,7 +14,7 @@
   let loggedIn = false;
   console.log(user_type);
 
-  async function handleRegister(e) { // Disable checkJs in jsconfig.json to avoid this error
+  async function handlePatientRegistration(e) { // Disable checkJs in jsconfig.json to avoid this error
     error = "";
 
     const requiredFieldsFilled =
@@ -136,7 +136,7 @@
     <a href="/" class="home-button">Back</a>
     <h2 style="text-align: center;">Create an Account</h2>
 
-    <form on:submit|preventDefault={handleRegister}>
+    <form on:submit|preventDefault={handlePatientRegistration}>
       <h4>
         Enter Full Name:
         <input
@@ -217,7 +217,7 @@
   <div class="dashboard">
     <a href={`/homepage?user_type=${user_type}`} class="home-button">Back</a>
     <h2 style="text-align: center;">Register Patient</h2>
-    <form on:submit|preventDefault={handleRegister}>
+    <form on:submit|preventDefault={handlePatientRegistration}>
       <h4>
         Enter Full Name:
         <input type="text" placeholder="Full Name" bind:value={name} required />

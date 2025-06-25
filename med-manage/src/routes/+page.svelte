@@ -17,31 +17,34 @@
     //         return;
     //     }
 	//     localStorage.setItem('user_type', user_type);
-    //     // Mock login check
-    //     if (user_type==="Patient" && email === "test@example.com" && password === "password") {
-    //         loggedIn = true;
-    //         console.log(user_type);
-
-    //         goto(`/dashboard?user_type=${user_type}`);
-    //     } 
-    //     else if(user_type==="Staff" && email === "test@example.com" && password === "password"){
-    //         loggedIn = true;
-    //         console.log(user_type);
-
-    //         goto(`/homepage?user_type=${user_type}`);
-    //     }
-    //     else {
-    //         error = "Invalid credentials.";
-    //     }
+    
     // }
 
-    async function handleLogin(e) {
+    async function handleMedicalLogin(e) {
   	
         if (!email || !password) {
             error = "Please fill in all fields.";
             return;
         }
 	    localStorage.setItem('user_type', user_type);
+
+        //     // Mock login check
+        if (user_type==="Patient" && email === "test@example.com" && password === "password") {
+            loggedIn = true;
+            console.log(user_type);
+
+            goto(`/dashboard?user_type=${user_type}`);
+        } 
+        else if(user_type==="Staff" && email === "test@example.com" && password === "password"){
+            loggedIn = true;
+            console.log(user_type);
+
+            goto(`/homepage?user_type=${user_type}`);
+        }
+        else {
+            error = "Invalid credentials.";
+        }
+
         const data = new FormData(e.currentTarget);
 
 
@@ -96,7 +99,7 @@
 {:else}
     <h2 style="text-align: center;">Login</h2>
 
-    <form on:submit|preventDefault={handleLogin}>
+    <form on:submit|preventDefault={handleMedicalLogin}>
 
         <select bind:value={user_type} required>
             <option value="" disabled selected>Select User</option>
@@ -116,10 +119,15 @@
         <p style="text-align: center; margin-top: 0rem;">
             Don't have an account? <a href="/registration?user_type=${user_type}">Register here</a>
         </p>
+        {:else if user_type === "Staff"}
+        <p style="text-align: center; margin-top: 0rem;">
+            Don't have login Details? <a href="#">Ask admin</a>
+        </p>
         {/if}
-        {#if error}
+
+        <!-- {#if error}
             <p class="error">{error}</p>
-        {/if}
+        {/if} -->
 
         <button type="submit">Login</button>
     </form>

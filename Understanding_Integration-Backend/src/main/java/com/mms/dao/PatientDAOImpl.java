@@ -77,10 +77,10 @@ public class PatientDAOImpl implements PatientDAO {
 			ps.setString(4, patient.getContactNumber());
 			ps.setString(5, patient.getAddress());
 			ps.setString(6, "PUBLIC");
-			ps.setInt(7, 1);
+			ps.setInt(7, 4);
 			ps.setString(8, "Patient history");
-			ps.setString(9, "Patient history");
-			ps.setString(10, "Patient history");
+			ps.setString(9, patient.getPatientEmail());
+			ps.setString(10, patient.getPatientPassword());
 //			System.out.println(ps.executeUpdate() > 0);
 
 			return ps.executeUpdate() > 0;
@@ -98,8 +98,8 @@ public class PatientDAOImpl implements PatientDAO {
 			ps.setString(4, patient.getContactNumber());
 			ps.setString(5, patient.getAddress());
 			ps.setString(6, patient.getInsuranceType());
-			ps.setInt(7, patient.getDoctorId());
-			ps.setString(8, patient.getPatientHistory());
+			ps.setInt(7, 6);
+			ps.setString(8, "Patient History");
 			ps.setInt(9, patient.getPatientId());
 
 			return ps.executeUpdate() > 0;
@@ -130,19 +130,24 @@ public class PatientDAOImpl implements PatientDAO {
 
 	@Override
 	public Patient getPatientByEmail(String email) throws SQLException {
-		String sql = "SELECT * FROM patient WHERE email = ?";
+		String sql = "SELECT * FROM patient WHERE patient_email = ?";
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			stmt.setString(1, email);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				Patient patient = new Patient();
-				patient.setPatientId(rs.getInt("id"));
-				patient.setPatientName(rs.getString("name"));
-				patient.setPatientEmail(rs.getString("email"));
+				patient.setPatientId(rs.getInt("patient_id"));
+				patient.setPatientName(rs.getString("patient_name"));
+				patient.setGender(rs.getString("Gender"));
+				patient.setDateOfBirth(rs.getDate("Date_Of_Birth"));
+				patient.setContactNumber(rs.getString("Contact_Number"));
+				patient.setAddress(rs.getString("Address"));
+				patient.setInsuranceType("PUBLIC");
+				patient.setDoctorId(1);
+				patient.setPatientHistory("Diagnosed/Not Diagnosed previously");
+				patient.setPatientEmail(rs.getString("patient_email"));
 				patient.setPatientPassword(rs.getString("password"));
-				patient.setContactNumber(rs.getString("phone"));
-				patient.setGender(rs.getString("gender"));
-				patient.setDateOfBirth(rs.getDate("dob"));
+				
 				return patient;
 			}
 		}

@@ -1,4 +1,4 @@
-package com.mms.model;
+ package com.mms.model;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -21,7 +21,7 @@ public class Registration_User extends Patient{
 	public Registration_User login(String email, String password) {
         Registration_User ru = null;
 
-        String sql = "SELECT * FROM registration WHERE email = ? AND password = ?";
+        String sql = "SELECT * FROM patient WHERE email = ? AND password = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

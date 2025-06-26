@@ -1,4 +1,4 @@
-<script lang='js'>
+<script lang="js">
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
 
@@ -14,7 +14,8 @@
   let loggedIn = false;
   console.log(user_type);
 
-  async function handlePatientRegistration(e) { // Disable checkJs in jsconfig.json to avoid this error
+  async function handlePatientRegistration(e) {
+    // Disable checkJs in jsconfig.json to avoid this error
     error = "";
 
     const requiredFieldsFilled =

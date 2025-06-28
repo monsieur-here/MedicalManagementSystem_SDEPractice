@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "fe8fa39e-36ff-4340-8201-f5d3483daab0",
+		"name": "MedicalManagementSystem",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33188969"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"email\": \"julia.schulz@gmail.com\",\r\n   \"password\": \"juliapw7\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/Understanding_Integration-Backend/patient/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Understanding_Integration-Backend",
+						"patient",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    //    \"Staff_id\":\"1\",\r\n    //    \"designation\": \"Nurse\", \r\n    //    \"Staff_name\": \"Lisa Schmidt\",\r\n    //    \"Gender\": \"Female\", \r\n    //    \"contact_number\": \"+4917211223344\", \r\n    //    \"staff_availability\": \"Monday-Friday\", \r\n    //    \"shift_start\": \"08:00:00\", \r\n    //    \"shift_end\": \"16:00:00\", \r\n    //    \"email\": \"lisa.schmidt@clinic.com\", \r\n    //    \"password\": \"nursepass1\",\r\n    //    \"specialist\": null\r\n\r\n         \r\n        \"patient_name\": \"Prajakta\",\r\n        \"Date_of_Birth\" : \"2001-03-04\",  \r\n        \"Gender\": \"Female\",\t\r\n        \"Contact_number\": \"+4913472826483\",\t\r\n        \"Address\": \"SRH Campus, Bonhoefferstrasse\",\r\n        \"doctor_id\": 6, \r\n        \"patient_history\": \"Patient history\",\r\n        \"email\": \"prajakta1424@gmail.com\", \r\n        \"password\": \"pr@Jakta\"\r\n\r\n    \r\n\r\n    // \"staff_id\": 5,\r\n    // \"designation\": \"Nurse\",\r\n    // \"page\":1,\r\n    // \"size\": 10\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/Understanding_Integration-Backend/patient/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Understanding_Integration-Backend",
+						"patient",
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -47,12 +47,12 @@ public class PatientRegistrationServlet extends HttpServlet {
 		        // Parse JSON (with Gson)
 		        JsonObject jsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
 
-		        String name = jsonObject.get("Patient_Name").getAsString();
+		        String name = jsonObject.get("patient_name").getAsString();
 		        System.out.println("Name: == "+name);
-		        String dobStr = jsonObject.get("Date_Of_Birth").getAsString();
 		        String gender = jsonObject.get("Gender").getAsString();
+		        String dobStr = jsonObject.get("Date_of_Birth").getAsString();
 		        String contactNumber = jsonObject.get("Contact_number").getAsString();
-		        String address = jsonObject.get("address").getAsString();
+		        String address = jsonObject.get("Address").getAsString();
 		        String email = jsonObject.get("email").getAsString();
 		        String password = jsonObject.get("password").getAsString();
 //		        int patientId = jsonObject.get("patient_id").getAsInt();

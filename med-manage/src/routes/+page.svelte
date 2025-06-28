@@ -37,51 +37,51 @@
     } else {
       error = "Invalid credentials.";
     }
-  }
 
-  const data = new FormData(e.currentTarget);
+    const data = new FormData(e.currentTarget);
 
-  // To Do - Validate Email and Password
+    // To Do - Validate Email and Password
 
-  const validateLogin = {
-    email: data.get("email"),
-    password: data.get("password"),
-  };
-
-  // Added - Sending POST to backend
-  try {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    //   const raw = JSON.stringify();
-
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: JSON.stringify(validateLogin),
+    const validateLogin = {
+      email: data.get("email"),
+      password: data.get("password"),
     };
 
-    const res = await fetch(
-      "http://localhost:8080/Understanding_Integration-Backend/patient/login",
-      requestOptions
-    );
+    // Added - Sending POST to backend
+    try {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
 
-    console.log(res);
+      //   const raw = JSON.stringify();
 
-    if (res.ok) {
-      alert("🎉 Login successfully done!");
-      loggedIn = true;
-      goto(`/dashboard?user_type=${user_type}`);
-      // goto(DOCTOR.DASHBOARD)
-    } else {
-      alert("Oops, something went wrong while creating new user ...!");
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(validateLogin),
+      };
 
-      const text = await res.text();
-      error = `Login failed: ${text}`;
+      const res = await fetch(
+        "http://localhost:8080/Understanding_Integration-Backend/patient/login",
+        requestOptions
+      );
+
+      console.log(res);
+
+      if (res.ok) {
+        alert("🎉 Login successfully done!");
+        loggedIn = true;
+        goto(`/dashboard?user_type=${user_type}`);
+        // goto(DOCTOR.DASHBOARD)
+      } else {
+        alert("Oops, something went wrong while creating new user ...!");
+
+        const text = await res.text();
+        error = `Login failed: ${text}`;
+      }
+    } catch (err) {
+      error = "Error connecting to server.";
+      console.error(err);
     }
-  } catch (err) {
-    error = "Error connecting to server.";
-    console.error(err);
   }
 </script>
 
@@ -169,10 +169,10 @@
     border-radius: 4px;
     cursor: pointer;
   }
-  p.error {
+  /* p.error {
     color: red;
     margin-top: -0.5rem;
     margin-bottom: 1rem;
     text-align: center;
-  }
+  } */
 </style>

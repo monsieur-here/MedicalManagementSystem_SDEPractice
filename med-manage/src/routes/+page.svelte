@@ -7,25 +7,15 @@
   let error = "";
   let loggedIn = false;
 
-  // function handleLogin() {
-  //     error = "";
-
-  //     if (!email || !password) {
-  //         error = "Please fill in all fields.";
-  //         return;
-  //     }
-  //     localStorage.setItem('user_type', user_type);
-
-  // }
-
   async function handleMedicalLogin(e) {
     if (!email || !password) {
       error = "Please fill in all fields.";
       return;
     }
+
     localStorage.setItem("user_type", user_type);
 
-    //     // Mock login check
+    // Mock login check
     if (
       user_type === "Patient" &&
       email === "test@example.com" &&
@@ -47,52 +37,51 @@
     } else {
       error = "Invalid credentials.";
     }
-  });
+  }
 
-    const data = new FormData(e.currentTarget);
+  const data = new FormData(e.currentTarget);
 
-    // To Do - Validate Email and Password
+  // To Do - Validate Email and Password
 
-    const validateLogin = {
-      email: data.get("email"),
-      password: data.get("password"),
+  const validateLogin = {
+    email: data.get("email"),
+    password: data.get("password"),
+  };
+
+  // Added - Sending POST to backend
+  try {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    //   const raw = JSON.stringify();
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: JSON.stringify(validateLogin),
     };
 
-    // Added - Sending POST to backend
-    try {
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
+    const res = await fetch(
+      "http://localhost:8080/Understanding_Integration-Backend/patient/login",
+      requestOptions
+    );
 
-      //   const raw = JSON.stringify();
+    console.log(res);
 
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: JSON.stringify(validateLogin),
-      };
+    if (res.ok) {
+      alert("🎉 Login successfully done!");
+      loggedIn = true;
+      goto(`/dashboard?user_type=${user_type}`);
+      // goto(DOCTOR.DASHBOARD)
+    } else {
+      alert("Oops, something went wrong while creating new user ...!");
 
-      const res = await fetch(
-        "http://localhost:8080/Understanding_Integration-Backend/patient/login",
-        requestOptions
-      );
-
-      console.log(res);
-
-      if (res.ok) {
-        alert("🎉 Login successfully done!");
-        loggedIn = true;
-        goto(`/dashboard?user_type=${user_type}`);
-        // goto(DOCTOR.DASHBOARD)
-      } else {
-        alert("Oops, something went wrong while creating new user ...!");
-
-        const text = await res.text();
-        error = `Login failed: ${text}`;
-      }
-    } catch (err) {
-      error = "Error connecting to server.";
-      console.error(err);
+      const text = await res.text();
+      error = `Login failed: ${text}`;
     }
+  } catch (err) {
+    error = "Error connecting to server.";
+    console.error(err);
   }
 </script>
 

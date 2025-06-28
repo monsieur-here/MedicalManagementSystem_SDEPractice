@@ -1,0 +1,168 @@
+{
+	"info": {
+		"_postman_id": "fe8fa39e-36ff-4340-8201-f5d3483daab0",
+		"name": "MedicalManagementSystem",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33188969"
+	},
+	"item": [
+		{
+			"name": "StaffSupport",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/Understanding_Integration-Backend/staffSupport?staff_id=2&designation=Receptionist&page=0&size=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Understanding_Integration-Backend",
+						"staffSupport"
+					],
+					"query": [
+						{
+							"key": "staff_id",
+							"value": "2"
+						},
+						{
+							"key": "designation",
+							"value": "Receptionist"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PatientLogin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"email\": \"julia.schulz@gmail.com\",\r\n   \"password\": \"juliapw7\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/Understanding_Integration-Backend/patient/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Understanding_Integration-Backend",
+						"patient",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PatientRegistration",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    //    \"Staff_id\":\"1\",\r\n    //    \"designation\": \"Nurse\", \r\n    //    \"Staff_name\": \"Lisa Schmidt\",\r\n    //    \"Gender\": \"Female\", \r\n    //    \"contact_number\": \"+4917211223344\", \r\n    //    \"staff_availability\": \"Monday-Friday\", \r\n    //    \"shift_start\": \"08:00:00\", \r\n    //    \"shift_end\": \"16:00:00\", \r\n    //    \"email\": \"lisa.schmidt@clinic.com\", \r\n    //    \"password\": \"nursepass1\",\r\n    //    \"specialist\": null\r\n\r\n         \r\n        \"patient_name\": \"Prajakta\",\r\n        \"Date_of_Birth\" : \"2001-03-04\",  \r\n        \"Gender\": \"Female\",\t\r\n        \"Contact_number\": \"+4913472826483\",\t\r\n        \"Address\": \"SRH Campus, Bonhoefferstrasse\",\r\n        \"doctor_id\": 6, \r\n        \"patient_history\": \"Patient history\",\r\n        \"email\": \"prajakta1424@gmail.com\", \r\n        \"password\": \"pr@Jakta\"\r\n\r\n    \r\n\r\n    // \"staff_id\": 5,\r\n    // \"designation\": \"Nurse\",\r\n    // \"page\":1,\r\n    // \"size\": 10\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/Understanding_Integration-Backend/patient/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Understanding_Integration-Backend",
+						"patient",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "StaffSupport",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Staff_id\": 14,\r\n    \"Staff_name\": \"Chris Columbus\",\r\n    \"designation\": \"ENT Consultant\",\r\n    \"Gender\": \"Male\",\r\n    \"contact_number\": \"+49 14242387142\",\r\n    \"staff_availability\": \"Tuesday - Thursday\",\r\n    \"shift_start\": \"12:00:00\",\r\n    \"shift_end\": \"18:00:00\",\r\n    \"staff_email\": \"chris.rich@clinic.com\",\t\r\n    \"password\": \"labtechpass6\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/Understanding_Integration-Backend/staffSupport",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Understanding_Integration-Backend",
+						"staffSupport"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Appointment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Appointment_id\": 11,\r\n    \"Slot\": \"2025-05-15 09:30:00\",\r\n    \"patient_id\": 107,\r\n    \"patient_name\": \"Julia Schulz\",\r\n    \"Visit_description\": \"General check-up. Patient expressed concerns about high blood pressure readings.\",\r\n    \"doctor_id\": 6,\r\n    \"doctor_name\": \"Dr. Felix Bergmann\",\r\n    \"Specialist\": \"Pediatrics\",\r\n    \"staff_email\": \"chris.rich@clinic.com\",\t\r\n    \"status\": \"Not Attended\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Understanding_Integration-Backend/appointment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Understanding_Integration-Backend",
+						"appointment"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

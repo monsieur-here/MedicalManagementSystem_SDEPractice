@@ -11,6 +11,8 @@
     // Redirect if already logged in
     if ($user) {
       goto("/dashboard");
+    } else {
+      goto("/auth");
     }
   });
 

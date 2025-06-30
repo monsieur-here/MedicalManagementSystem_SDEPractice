@@ -1,6 +1,7 @@
 <script>
   //to check if doctors are available in receptionist portal
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
 
   let selectedDate = new Date().toISOString().split("T")[0];
   let selectedConsultationType = '';
@@ -87,7 +88,7 @@ function convertTo24Hour(timeStr) {
 </script>
 
 <div class="header">
-	<a href={`/homepage?user_type=Staff`} class="home-button">Back</a>
+	<a href={`/receptionists`} class="home-button">Back</a>
 	<h1 class="title">📋 Appointment List</h1>
 	<a href="/" class="logout-button">Logout</a>
 </div>

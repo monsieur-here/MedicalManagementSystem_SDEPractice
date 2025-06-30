@@ -24,9 +24,7 @@
     </div>
 
     <div class="card">
-      <a href="/dashboard/prescriptions?user_type=Patient"
-        >📄 View Prescriptions</a
-      >
+      <a href="/dashboard/prescriptions?user_type=Patient">📄 View Prescriptions</a>
     </div>
 
     <div class="card">

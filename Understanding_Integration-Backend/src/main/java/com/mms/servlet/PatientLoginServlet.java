@@ -3,10 +3,15 @@
 import java.io.BufferedReader;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mms.dao.UserDAO;
+import com.mms.model.GeneralResponse;
+import com.mms.model.User;
 import com.mms.utils.DBConnection;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,15 +29,18 @@ import jakarta.servlet.http.HttpServletResponse;
 //import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpSession;
 import com.mms.utils.CORSFilter;
+import org.json.JSONObject;
 
-@WebServlet("/patient/login")
+ @WebServlet("/patient/login")
 public class PatientLoginServlet extends HttpServlet {
 	private PatientDAO patientDAO;
+	private UserDAO userDAO;
 
 	@Override
 	public void init() {
 		try {
 			patientDAO = new PatientDAOImpl(DBConnection.getConnection());
+			userDAO = new UserDAO(DBConnection.getConnection());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -43,7 +51,8 @@ public class PatientLoginServlet extends HttpServlet {
 
 //		resp.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
 //		resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//		resp.setHeader("Access-Control-Allow-Headers", "Content-Type"); 
+//		resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
+		GeneralResponse generalResponse = new GeneralResponse();
 
 		try {
 			BufferedReader reader = req.getReader();
@@ -59,14 +68,30 @@ public class PatientLoginServlet extends HttpServlet {
 				return;
 			}
 
-			Patient patient = patientDAO.getPatientByEmail(email);
-			if (patient != null) { // Perform the null check here
+//			Patient patient = patientDAO.getPatientByEmail(email);
+			User user = userDAO.getUserByEmail(email);
+			if (user != null) { // Perform the null check here
 //		        System.out.println(patient.getPatientPassword()); // Now it's safe to call
-		        if (patient.getPatientPassword().equals(password)) {
+		        if (user.getPassword().equals(password)) {
 		            HttpSession session = req.getSession(true);
-		            session.setAttribute("patientId", patient.getPatientId());
+		            session.setAttribute("patientId", user.getId());
 		            resp.setStatus(HttpServletResponse.SC_OK);
-		            writeJsonResponse(resp, Map.of("message", "Login successful", "patientId", patient.getPatientId()));
+					generalResponse.setCode(200);
+					user.setPassword(null);
+					generalResponse.setMsg("User Added");
+					HashMap<String, Object> data = new HashMap<>();
+					data.put("user", user);
+					generalResponse.setData(data);
+					PrintWriter out = resp.getWriter();
+					JSONObject jsonResponse = new JSONObject();
+					jsonResponse.put("code", generalResponse.getCode());
+					jsonResponse.put("msg", generalResponse.getMsg());
+					if (generalResponse.getData() != null) {
+						jsonResponse.put("data", generalResponse.getData());
+					}
+					out.print(jsonResponse.toString());
+					out.flush();
+//		            writeJsonResponse(resp, Map.of("message", "Login successful", "patientId", patient.getPatientId()));
 		        } else {
 		            resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid credentials.");
 		        }

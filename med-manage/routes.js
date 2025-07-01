@@ -1,0 +1,60 @@
+// auth routes ...
+export const AUTH_ROUTES = {
+  login: "/auth/login",
+  register: "/auth/register",
+};
+
+// patient routes ...
+export const PATIENT_ROUTES = {
+  dashboard: {
+    title: "Dashboard",
+    description: "Patient Dashboard",
+    url: "/patient/dashboard",
+  },
+  appointments: {
+    title: "Appointments",
+    description: "Patient appointments",
+    url: "/patient/appointments",
+  },
+  prescriptions: {
+    title: "Prescriptions",
+    description: "Patient prescription",
+    url: "/patient/prescription",
+  },
+};
+
+export const RECEPTIONIST_ROUTES = {
+  dashboard: {
+    title: "Dashboard",
+    description: "Receptionist Dashboard",
+    url: "/receptionist/dashboard",
+  },
+  appointments: {
+    title: "Appointments",
+    description: "Receptionist appointments",
+    url: "/receptionist/appointments",
+  },
+  prescriptions: {
+    title: "Prescriptions",
+    description: "Patient prescription",
+    url: "/Receptionist/prescription",
+  },
+};
+
+export const DOCTORS_ROUTES = {
+  dashboard: {
+    title: "Dashboard",
+    description: "Doctor Dashboard",
+    url: "/doctor/dashboard",
+  },
+  appointments: {
+    title: "Appointments",
+    description: "Doctor appointments",
+    url: "/doctor/appointments",
+  },
+  prescriptions: {
+    title: "Prescriptions",
+    description: "Doctor prescription",
+    url: "/doctor/prescription",
+  },
+};

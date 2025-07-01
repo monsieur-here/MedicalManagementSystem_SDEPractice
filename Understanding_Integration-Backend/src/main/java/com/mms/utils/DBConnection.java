@@ -8,9 +8,9 @@ public class DBConnection {
 
 	private static Connection conn;
 
-	private static final String url = "jdbc:mysql://localhost:3306/doctor_management";
+	private static final String url = "jdbc:mysql://localhost:3306/mms";
 	private static final String user = "root";
-	private static final String password = "admin";
+	private static final String password = "root";
 
 	static {
 		try {

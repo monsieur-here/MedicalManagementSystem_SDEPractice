@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +27,14 @@ import com.mms.utils.GsonTimeUtility;
 @WebServlet("/patient-bill")
 public class BillServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private BillDAO billDAO;
+    private BillDAO billDAOImpl;
     private Gson gson;
+    
 
     @Override
     public void init() throws ServletException {
         // Initialize DAO - in a real app, inject DB connection or use DI framework
-        this.billDAO = new BillDAOImpl(); // Using in-memory implementation for demonstration
+        this.billDAOImpl = new BillDAOImpl(); // Using in-memory implementation for demonstration
         // Initialize Gson using the GsonTimeUtility to handle Timestamp and Date
         this.gson = GsonTimeUtility.getGson();
     }
@@ -68,25 +70,25 @@ public class BillServlet extends HttpServlet {
             }
 
             // Priority 1: Get bill by ID
+            int billId = 0;
             if (billIdParam != null && !billIdParam.isEmpty()) {
-                int billId;
+            	 
                 try {
                     billId = Integer.parseInt(billIdParam);
+                    Bill bill = billDAOImpl.getBillById(billId);
+                    out.print(gson.toJson(bill));
                 } catch (NumberFormatException e) {
                     resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                     out.print(gson.toJson(Map.of("error", "Invalid Bill ID format. Must be a number.")));
                     return;
                 }
-
-                Bill bill = billDAO.getBillById(billId);
-                if (bill != null) {
-                    out.print(gson.toJson(bill));
-                } else {
+            }
+            else {
                     resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     out.print(gson.toJson(Map.of("error", "Bill not found with ID: " + billId)));
-                }
-                return; // Exit after handling specific bill request
-            }
+//                    return; // Exit after handling specific bill request
+                 }
+                
 
             // Priority 2: Get bills by Appointment ID
             if (appointmentIdParam != null && !appointmentIdParam.isEmpty()) {
@@ -98,26 +100,29 @@ public class BillServlet extends HttpServlet {
                     out.print(gson.toJson(Map.of("error", "Invalid Appointment ID format. Must be a number.")));
                     return;
                 }
-                List<Bill> bills = billDAO.getBillsByAppointmentId(appointmentId, page, size);
+                List<Bill> bills = billDAOImpl.getBillsByAppointmentId(appointmentId, page, size);
                 if (bills != null && !bills.isEmpty()) {
                     out.print(gson.toJson(bills));
                 } else {
                     resp.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204 No Content
                     out.print(gson.toJson(Map.of("message", "No bills found for appointment ID: " + appointmentId)));
                 }
-                return; // Exit after handling appointment-specific bills
-            }
+             }
+            
+//            else {
+//            	return; // Exit after handling appointment-specific bills
+//            }
 
             // Priority 3: Get bills by Patient Name
             if (patientNameParam != null && !patientNameParam.isEmpty()) {
-                List<Bill> bills = billDAO.getBillsByPatientName(patientNameParam, page, size);
+                List<Bill> bills = billDAOImpl.getBillsByPatientName(patientNameParam, page, size);
                 if (bills != null && !bills.isEmpty()) {
                     out.print(gson.toJson(bills));
                 } else {
                     resp.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204 No Content
                     out.print(gson.toJson(Map.of("message", "No bills found for patient name: " + patientNameParam)));
                 }
-                return; // Exit after handling patient name specific bills
+//                return; // Exit after handling patient name specific bills
             }
 
             // Priority 4: Get all bills (requires Receptionist role)
@@ -131,7 +136,7 @@ public class BillServlet extends HttpServlet {
                 return;
             }
 
-            List<Bill> allBills = billDAO.getAllBills(page, size);
+            List<Bill> allBills = billDAOImpl.getAllBills(page, size);
             if (allBills != null && !allBills.isEmpty()) {
                 out.print(gson.toJson(allBills));
             } else {
@@ -214,7 +219,7 @@ public class BillServlet extends HttpServlet {
             // If you still want to store it, you'd need to add it back to Bill.java
             // bill.setReceptionistStaffId(receptionistStaffId); // COMMENTED OUT as per new Bill DTO
 
-            boolean added = billDAO.addBill(bill);
+            boolean added = billDAOImpl.addBill(bill);
             if (added) {
                 resp.setStatus(HttpServletResponse.SC_CREATED); // 201 Created
                 out.print(gson.toJson(Map.of("message", "Bill created successfully", "billId", bill.getBill_id())));

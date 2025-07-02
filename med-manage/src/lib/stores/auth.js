@@ -49,17 +49,17 @@ function createUserStore() {
       }
     },
 
-    register: async (email, password, name) => {
+    register: async (postObj) => {
       try {
-        // TODO: update it with actual api
-
-        const response = await fetch("/api/auth/register", {
+        const response = await fetch(BASE_API_URL + "/patient/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, password, name }),
+          body: JSON.stringify(postObj),
         });
+
+        console.log(response);
 
         if (!response.ok) {
           throw new Error("Registration failed");

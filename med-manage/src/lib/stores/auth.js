@@ -1,6 +1,10 @@
 import { writable } from "svelte/store";
 import { browser } from "$app/environment";
 
+import { BASE_API_URL } from "$lib/config.js";
+import { AUTH_ROUTES } from "$lib/routes.js";
+import { ConvertToJSONFromStream } from "$lib/utils";
+
 // Create user store
 function createUserStore() {
   const { subscribe, set, update } = writable(null);
@@ -10,7 +14,7 @@ function createUserStore() {
     login: async (email, password) => {
       try {
         // TODO: update it with actual api
-        const response = await fetch("/api/auth/login", {
+        const response = await fetch(BASE_API_URL + "/patient/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -18,11 +22,11 @@ function createUserStore() {
           body: JSON.stringify({ email, password }),
         });
 
-        if (!response.ok) {
+        const userData = await ConvertToJSONFromStream(response);
+
+        if (!userData.code === 200) {
           throw new Error("Invalid credentials");
         }
-
-        const userData = await response.json();
 
         // Store token in localStorage
         if (browser) {

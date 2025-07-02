@@ -286,5 +286,21 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		// TODO Auto-generated method stub
 		return false;
 	}
-    
+    @Override
+    public List<Appointment> getAllAppointmentsForReceptionist() throws SQLException {
+        List<Appointment> appointments = new ArrayList<>();
+        String sql = "SELECT * FROM appointment ORDER BY Slot DESC";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Appointment app = mapRowToAppointment(rs);
+                appointments.add(app);
+            }
+        }
+        return appointments;
+    }
 }
+

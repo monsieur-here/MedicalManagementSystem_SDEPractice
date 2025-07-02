@@ -1,7 +1,15 @@
 // auth routes ...
 export const AUTH_ROUTES = {
-  login: "/auth/login",
-  register: "/auth/register",
+  login: {
+    title: "Login",
+    description: "Login Section",
+    url: "/auth/login",
+  },
+  register: {
+    title: "Register",
+    description: "Registration Section",
+    url: "/auth/register",
+  },
 };
 
 // patient routes ...

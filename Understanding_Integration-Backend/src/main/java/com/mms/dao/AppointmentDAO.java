@@ -28,4 +28,7 @@ public interface AppointmentDAO {
 	List<Appointment> getAllAppointments(int page, int size);
 	boolean isDoctorAvailable(int doctorId, Date slot) throws SQLException;
 	boolean isDoctorAvailable1(int doctorId, Date slot) throws SQLException;
+
+    //get appointmets for receptonist
+    List<Appointment> getAllAppointmentsForReceptionist() throws SQLException;
 }

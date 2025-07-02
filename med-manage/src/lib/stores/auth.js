@@ -2,7 +2,6 @@ import { writable } from "svelte/store";
 import { browser } from "$app/environment";
 
 import { BASE_API_URL } from "$lib/config.js";
-import { AUTH_ROUTES } from "$lib/routes.js";
 import { ConvertToJSONFromStream } from "$lib/utils";
 
 // Create user store
@@ -29,7 +28,10 @@ function createUserStore() {
 
         // Store token in localStorage
         if (browser && userData?.data?.user?.email) {
-          localStorage.setItem("token", userData?.data?.user?.email);
+          localStorage.setItem(
+            "user_data",
+            JSON.stringify(userData?.data?.user)
+          );
         }
 
         set(userData?.data?.user);

@@ -1,8 +1,15 @@
 import { writable } from "svelte/store";
 import { browser } from "$app/environment";
+import { goto } from "$app/navigation";
 
 import { BASE_API_URL } from "$lib/config.js";
 import { ConvertToJSONFromStream } from "$lib/utils";
+import {
+  AUTH_ROUTES,
+  DOCTORS_ROUTES,
+  PATIENT_ROUTES,
+  RECEPTIONIST_ROUTES,
+} from "$lib/routes";
 
 // Create user store
 function createUserStore() {
@@ -36,6 +43,17 @@ function createUserStore() {
             "user_data",
             JSON.stringify(userData?.data?.user)
           );
+
+          const redirectURL =
+            userData.data?.user?.role === "ROLE_PATIENT"
+              ? PATIENT_ROUTES.dashboard.url
+              : userData.data?.user?.role === "ROLE_RECEPTIONED"
+              ? RECEPTIONIST_ROUTES.dashboard.url
+              : userData.data?.user?.role === "ROLE_DOCTOR"
+              ? DOCTORS_ROUTES.dashboard.url
+              : null;
+
+          goto(redirectURL);
         }
 
         set({
@@ -58,8 +76,6 @@ function createUserStore() {
           },
           body: JSON.stringify(postObj),
         });
-
-        console.log(response);
 
         if (!response.ok) {
           throw new Error("Registration failed");

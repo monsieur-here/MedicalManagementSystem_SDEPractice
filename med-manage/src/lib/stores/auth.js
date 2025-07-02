@@ -6,7 +6,11 @@ import { ConvertToJSONFromStream } from "$lib/utils";
 
 // Create user store
 function createUserStore() {
-  const { subscribe, set, update } = writable(null);
+  const { subscribe, set, update } = writable({
+    isAuthenticated: false,
+    user: null,
+    loading: false,
+  });
 
   return {
     subscribe,
@@ -34,7 +38,11 @@ function createUserStore() {
           );
         }
 
-        set(userData?.data?.user);
+        set({
+          isAuthenticated: true,
+          user: userData?.data?.user,
+          loading: false,
+        });
         return { success: true };
       } catch (error) {
         return { success: false, error: error.message };
@@ -63,7 +71,11 @@ function createUserStore() {
           localStorage.setItem("token", userData.token);
         }
 
-        set(userData.user);
+        set({
+          isAuthenticated: true,
+          user: userData?.data?.user,
+          loading: false,
+        });
         return { success: true };
       } catch (error) {
         return { success: false, error: error.message };
@@ -72,35 +84,34 @@ function createUserStore() {
 
     logout: () => {
       if (browser) {
-        localStorage.removeItem("token");
+        localStorage.removeItem("user_data");
       }
-      set(null);
+      set({
+        isAuthenticated: false,
+        user: null,
+        loading: false,
+      });
     },
 
     checkAuth: async () => {
       if (!browser) return;
 
-      const token = localStorage.getItem("token");
-      if (!token) return;
+      const userData = JSON.parse(localStorage.getItem("user_data"));
+      if (!userData?.email) return;
 
       try {
-        // TODO: update it with actual api
-
-        const response = await fetch("/api/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const userData = await response.json();
-          set(userData.user);
+        if (userData?.email) {
+          set({
+            isAuthenticated: true,
+            user: userData,
+            loading: false,
+          });
         } else {
-          localStorage.removeItem("token");
+          localStorage.removeItem("user_data");
         }
       } catch (error) {
         console.error("Auth check failed:", error);
-        localStorage.removeItem("token");
+        localStorage.removeItem("user_data");
       }
     },
   };

@@ -2,8 +2,8 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { user } from "$lib/stores/auth.js";
-  import Login from "$lib/components/Login.svelte";
-  import Register from "$lib/components/Register.svelte";
+  import Login from "./login/+page.svelte";
+  import Register from "./register/+page.svelte";
 
   let currentMode = "login"; // 'login' or 'register'
 

@@ -13,7 +13,6 @@ function createUserStore() {
     subscribe,
     login: async (email, password) => {
       try {
-        // TODO: update it with actual api
         const response = await fetch(BASE_API_URL + "/patient/login", {
           method: "POST",
           headers: {
@@ -29,11 +28,11 @@ function createUserStore() {
         }
 
         // Store token in localStorage
-        if (browser) {
-          localStorage.setItem("token", userData.token);
+        if (browser && userData?.data?.user?.email) {
+          localStorage.setItem("token", userData?.data?.user?.email);
         }
 
-        set(userData.user);
+        set(userData?.data?.user);
         return { success: true };
       } catch (error) {
         return { success: false, error: error.message };

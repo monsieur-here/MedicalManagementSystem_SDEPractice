@@ -6,7 +6,7 @@
   import { AUTH_ROUTES } from "$lib/routes";
   import { browser } from "$app/environment";
 
-  export let redirectTo = AUTH_ROUTES.login.url; // Where to redirect if not authenticated
+  export let redirectTo = AUTH_ROUTES.login.url;
   export let requireAuth = true;
   export let showLoader = true;
 
@@ -30,7 +30,7 @@
   ) {
     const currentPath = $page.url.pathname;
     if (currentPath !== redirectTo) {
-      goto(redirectTo);
+      goto(`${redirectTo}?redirect=${encodeURIComponent(currentPath)}`);
     }
   }
 
@@ -38,17 +38,20 @@
   $: shouldShowLoader = authState?.loading && showLoader;
 </script>
 
-<!-- Loading state -->
-{#if shouldShowLoader}
+{#if !mounted}
+  <!-- Show loading on initial server render -->
+  <div class="auth-loading">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+{:else if shouldShowLoader}
   <div class="auth-loading">
     <div class="spinner"></div>
     <p>Loading...</p>
   </div>
 {:else if shouldRenderChildren}
-  <!-- Render child components when authenticated or auth not required -->
   <slot user={authState.user} isAuthenticated={authState.isAuthenticated} />
 {:else}
-  <!-- Optional: Show message while redirecting -->
   <div class="auth-redirect">
     <p>Redirecting to login...</p>
   </div>

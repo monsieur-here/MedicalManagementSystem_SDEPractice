@@ -1,6 +1,7 @@
 <script>
   import { goto } from "$app/navigation";
   import { PATIENT_ROUTES } from "$lib/routes";
+  import { handleLogOut } from "$lib/utils";
 
   // Mock prescriptions with numeric ids
   let prescriptions = [
@@ -20,7 +21,7 @@
 <div class="header">
   <a href={PATIENT_ROUTES.dashboard.url} class="home-button">Back</a>
   <h1 class="title">Prescriptions</h1>
-  <a href="/" class="logout-button">Logout</a>
+  <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>
 
 <div class="dashboard">

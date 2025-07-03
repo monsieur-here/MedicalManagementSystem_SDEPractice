@@ -1,6 +1,7 @@
 <script>
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
+  import { handleLogOut } from "$lib/utils";
 
   $: user_type = $page.url.searchParams.get("user_type");
   let doctors = [
@@ -86,7 +87,7 @@
 <div class="header">
   <a href={`/dashboard?user_type=${user_type}`} class="home-button">Back</a>
   <h1>📅 Book Appointment</h1>
-  <button class="logout-button" on:click={() => goto("/")}>Logout</button>
+  <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>
 
 <!-- Form Fields Only -->

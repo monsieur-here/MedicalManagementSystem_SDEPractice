@@ -1,6 +1,7 @@
 <script>
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
+  import { handleLogOut } from "$lib/utils";
 
   let name = "";
   let date = "";
@@ -25,7 +26,7 @@
 
 <div class="header">
   <a href="/dashboard?user_type=Patient" class="home-button">Home</a>
-  <a href="/" class="logout-button">Logout</a>
+  <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>
 {#if name}
   <h2 style="text-align: center;">Appointment Confirmed ✅</h2>

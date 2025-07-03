@@ -1,6 +1,7 @@
 <script>
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
+  import { handleLogOut } from "$lib/utils";
 
   // Get ID from URL
   $: id = Number($page.params.id);
@@ -39,7 +40,7 @@
 <div class="header">
   <a href="/dashboard/prescriptions" class="home-button">Back</a>
   <h1 class="title">Prescriptions</h1>
-  <a href="/" class="logout-button">Logout</a>
+  <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>
 {#if prescription}
   <h2 style="text-align: center;">Prescription Details</h2>

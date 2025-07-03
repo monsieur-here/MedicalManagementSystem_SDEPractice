@@ -1,44 +1,45 @@
 <script>
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
+  import { handleLogOut } from "$lib/utils";
 
   $: user_type = $page.url.searchParams.get("user_type");
 
-	let appointments = [
-		{
-			appointmentId: 1,
-			patientId:1,
-			patientName: "John Doe",
-			doctorId:1,
-			doctor: "Dr. Smith",
-			specialist:'General',
-			date: "2025-06-20",
-			time: "10:00 AM",
-			status: "Scheduled",
-		},
-		{
-			appointmentId: 2,
-			patientId:1,
-			patientName: "Jane Doe",
-			doctorId:1,
-			doctor: "Dr. Adams",
-			specialist:'Dental',
-			date: "2025-07-15",
-			time: "2:30 PM",
-			status: "Scheduled",
-		},
-		{
-			appointmentId: 3,
-			patientId:1,
-			patientName: "Ellen Lee",
-			doctorId:1,
-			doctor: "Dr. Gomez",
-			specialist:'Cardiology',
-			date: "2025-05-05",
-			time: "4:00 PM",
-			status: "Scheduled",
-		}
-	];
+  let appointments = [
+    {
+      appointmentId: 1,
+      patientId: 1,
+      patientName: "John Doe",
+      doctorId: 1,
+      doctor: "Dr. Smith",
+      specialist: "General",
+      date: "2025-06-20",
+      time: "10:00 AM",
+      status: "Scheduled",
+    },
+    {
+      appointmentId: 2,
+      patientId: 1,
+      patientName: "Jane Doe",
+      doctorId: 1,
+      doctor: "Dr. Adams",
+      specialist: "Dental",
+      date: "2025-07-15",
+      time: "2:30 PM",
+      status: "Scheduled",
+    },
+    {
+      appointmentId: 3,
+      patientId: 1,
+      patientName: "Ellen Lee",
+      doctorId: 1,
+      doctor: "Dr. Gomez",
+      specialist: "Cardiology",
+      date: "2025-05-05",
+      time: "4:00 PM",
+      status: "Scheduled",
+    },
+  ];
 
   let selectedDate = new Date().toISOString().split("T")[0]; // default: today (YYYY-MM-DD)
 
@@ -70,30 +71,38 @@
 <div class="header">
   <a href={`/homepage?user_type=${user_type}`} class="home-button">Back</a>
   <h1 class="title">📋 Appointment List</h1>
-  <a href="/" class="logout-button">Logout</a>
+  <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>
+
 <div class="date-filter">
-	<label for="date">📅 Filter appointments: </label>
-	<input id="date" type="date" bind:value={selectedDate} />
-</div>{#if filteredAppointments.length > 0}
-	<div class="appointments">
-		{#each filteredAppointments as app (app.appointmentId)}
-			<div class="card">
-				<h3>{app.patientName}</h3>
-				<p><strong>Doctor:</strong> {app.doctor}</p>o
-				<p><strong>Date:</strong> {app.date}</p>
-				<p><strong>Time:</strong> {app.time}</p>
-				<p><strong>Status:</strong> {app.status}</p>
-				<div class="actions">
-					<button on:click={()=>{updateStatus(app.appointmentId, "Completed"); goto(`/homepage/bill`);}}>Mark as Completed</button>
-					<button
-						on:click={() => cancelAppointment(app.appointmentId)}
-						class="cancel">Cancel</button
-					>
-				</div>
-			</div>
-		{/each}
-	</div>
+  <label for="date">📅 Filter appointments: </label>
+  <input id="date" type="date" bind:value={selectedDate} />
+</div>
+{#if filteredAppointments.length > 0}
+  <div class="appointments">
+    {#each filteredAppointments as app (app.appointmentId)}
+      <div class="card">
+        <h3>{app.patientName}</h3>
+        <p><strong>Doctor:</strong> {app.doctor}</p>
+        o
+        <p><strong>Date:</strong> {app.date}</p>
+        <p><strong>Time:</strong> {app.time}</p>
+        <p><strong>Status:</strong> {app.status}</p>
+        <div class="actions">
+          <button
+            on:click={() => {
+              updateStatus(app.appointmentId, "Completed");
+              goto(`/homepage/bill`);
+            }}>Mark as Completed</button
+          >
+          <button
+            on:click={() => cancelAppointment(app.appointmentId)}
+            class="cancel">Cancel</button
+          >
+        </div>
+      </div>
+    {/each}
+  </div>
 {:else}
   <p class="empty">No appointments scheduled.</p>
 {/if}

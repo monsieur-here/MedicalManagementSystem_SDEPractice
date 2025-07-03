@@ -2,6 +2,7 @@
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import { PATIENT_ROUTES } from "$lib/routes";
+  import { handleLogOut } from "$lib/utils";
 
   $: user_type = $page.url.searchParams.get("user_type");
 
@@ -16,7 +17,7 @@
 
   <h1 class="title">🏥 Welcome to MedCare Portal</h1>
 
-  <a href="/" class="logout-button">Logout</a>
+  <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>
 
 <div class="dashboard">

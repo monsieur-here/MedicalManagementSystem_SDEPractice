@@ -1,6 +1,8 @@
 <script>
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
+  import { handleLogOut } from "$lib/utils";
+
   $: user_type = $page.url.searchParams.get("user_type");
   const user = {
     name: "John Doe",
@@ -11,7 +13,7 @@
 <div class="header">
   <a href="/dashboard?user_type=${user_type}" class="home-button">Home</a>
   <h1 class="title">🏥 Welcome to MedCare Portal</h1>
-  <a href="/" class="logout-button">Logout</a>
+  <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>
 
 <div class="dashboard">
@@ -24,7 +26,9 @@
     </div>
 
     <div class="card">
-      <a href="/dashboard/prescriptions?user_type=Patient">📄 View Prescriptions</a>
+      <a href="/dashboard/prescriptions?user_type=Patient"
+        >📄 View Prescriptions</a
+      >
     </div>
 
     <div class="card">

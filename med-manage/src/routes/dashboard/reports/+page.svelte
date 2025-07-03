@@ -1,5 +1,6 @@
 <script>
   import { goto } from "$app/navigation";
+  import { handleLogOut } from "$lib/utils";
 
   const reports = [
     { id: 1, title: "Blood Test", date: "2025-05-15" },
@@ -22,7 +23,7 @@
 <div class="header">
   <a href="/dashboard?user_type=Patient" class="home-button">Back</a>
   <h1 class="title">Medical Reports</h1>
-  <a href="/" class="logout-button">Logout</a>
+  <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>
 <div class="dashboard">
   <ul class="list">

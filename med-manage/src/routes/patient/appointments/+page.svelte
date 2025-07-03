@@ -1,13 +1,14 @@
 <script>
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { PATIENT_ROUTES } from "$lib/routes";
+  import { AUTH_ROUTES, PATIENT_ROUTES } from "$lib/routes";
   import { onMount } from "svelte";
   import { createAppointment } from "../../../apis/patient/appointment";
+  import { handleLogOut } from "$lib/utils";
 
   let doctors = [
     {
-      id: 1,
+      id: 16,
       name: "Dr. Smith",
       specialty: "Cardiologist",
       schedule: ["2025-06-10 10:00", "2025-06-20 14:00", "2025-06-21 09:00"],
@@ -69,7 +70,7 @@
     }
 
     const payload = {
-      user_id: loginUser?.id,
+      patient_id: loginUser?.id,
       doctor_id: Number(data.get("specialist")),
       notes: data.get("reason"),
     };
@@ -83,7 +84,7 @@
 <div class="header">
   <a href={PATIENT_ROUTES.dashboard.url} class="home-button">Back</a>
   <h1>📅 Book Appointment</h1>
-  <button class="logout-button" on:click={() => goto("/")}>Logout</button>
+  <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>
 
 <!-- Form Fields Only -->

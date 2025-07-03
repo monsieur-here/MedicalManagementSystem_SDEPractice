@@ -2,26 +2,21 @@
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
+  import { handleLogOut } from "$lib/utils";
 
-	let appointmentId = "";
-	let diagnosis = "";
-	let successMessage = "";
-	let criticality="";
-	/**
-     * @type {any[]}
-     */
-	let medications = [];
-
-	let newMed = {
-		name: "",
-		dosage:"",
-		frequency:"",
-		dateIssued: "",
-		description: ""
-	};
+  let appointmentId = "";
+  let diagnosis = "";
+  let successMessage = "";
+  let criticality = "";
+  /**
+   * @type {any[]}
+   */
+  let medications = [];
 
   let newMed = {
     name: "",
+    dosage: "",
+    frequency: "",
     dateIssued: "",
     description: "",
   };
@@ -46,23 +41,30 @@
 
     const issuedDate = new Date(newMed.dateIssued);
     issuedDate.setHours(0, 0, 0, 0); // Remove time part
-	if (issuedDate < today) {
-		successMessage = "⚠️ Medication issue date cannot be in the past.";
-		return;
-	}
-	// Validate appointment ID is numeric
-	if (!/^\d+$/.test(appointmentId)) {
-		successMessage = "⚠️ Appointment ID must contain numbers only.";
-		return;
-	}
-	
-	medications.push({ ...newMed });
-	newMed = { name: "", dosage:"", frequency:"", dateIssued: "", description: "" };
-	successMessage = ""; // Clear any previous error
-		if (!appointmentId || !diagnosis || medications.length === 0) {
-			successMessage = "⚠️ Please fill out all fields and add at least one medication.";
-			return;
-		}
+    if (issuedDate < today) {
+      successMessage = "⚠️ Medication issue date cannot be in the past.";
+      return;
+    }
+    // Validate appointment ID is numeric
+    if (!/^\d+$/.test(appointmentId)) {
+      successMessage = "⚠️ Appointment ID must contain numbers only.";
+      return;
+    }
+
+    medications.push({ ...newMed });
+    newMed = {
+      name: "",
+      dosage: "",
+      frequency: "",
+      dateIssued: "",
+      description: "",
+    };
+    successMessage = ""; // Clear any previous error
+    if (!appointmentId || !diagnosis || medications.length === 0) {
+      successMessage =
+        "⚠️ Please fill out all fields and add at least one medication.";
+      return;
+    }
 
     if (issuedDate < today) {
       successMessage = "⚠️ Medication issue date cannot be in the past.";
@@ -95,7 +97,7 @@
 <div class="header">
   <a href={`/homepage?user_type=Doctor`} class="home-button">Back</a>
   <h1 class="title">🩺 Patient Diagnosis</h1>
-  <a href="/" class="logout-button">Logout</a>
+  <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>
 
 <div class="form-container">

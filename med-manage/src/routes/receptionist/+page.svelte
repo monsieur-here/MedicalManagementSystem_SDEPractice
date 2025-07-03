@@ -59,57 +59,57 @@
   });
 </script>
 
-<div class="header">
-  <a href={`/receptionists`} class="home-button">Home</a>
-  <h1>🏥 Welcome to MedCare Portal</h1>
-  <button class="logout-button" on:click={handleLogOut}>Logout</button>
-</div>
-<div class="grid">
-  <div class="card" on:click={() => goto(`/registration`)} tabindex="0">
-    <h2 align="center">Patient Registration</h2>
+<div>
+  <div class="header">
+    <a href={`/receptionists`} class="home-button">Home</a>
+    <h1>🏥 Welcome to MedCare Portal</h1>
+    <button class="logout-button" on:click={handleLogOut}>Logout</button>
   </div>
-  <div
-    class="card"
-    on:click={() => goto("/receptionists/doctors")}
-    tabindex="0"
-  >
-    <h2 align="center">Doctor Availability</h2>
+
+  <div class="grid">
+    <div
+      class="card"
+      on:click={() => goto("/receptionists/doctors")}
+      tabindex="0"
+    >
+      <h2 align="center">Doctor Availability</h2>
+    </div>
   </div>
-</div>
 
-<div class="container">
-  <h3>Appointments for the week</h3>
+  <div class="container">
+    <h3>Appointments for the week</h3>
 
-  <div class="scroll-section">
-    {#each weekDates as dateStr}
-      <div class="day-block">
-        <h3>{dateStr}</h3>
-        {#each slots as time}
-          {#if appointments.find((a) => a.date === dateStr && a.slot === time)}
-            {#each appointments.filter((a) => a.date === dateStr && a.slot === time) as app}
+    <div class="scroll-section">
+      {#each weekDates as dateStr}
+        <div class="day-block">
+          <h3>{dateStr}</h3>
+          {#each slots as time}
+            {#if appointments.find((a) => a.date === dateStr && a.slot === time)}
+              {#each appointments.filter((a) => a.date === dateStr && a.slot === time) as app}
+                <div
+                  class="appointment-card-button"
+                  on:click={() => goto(`/receptionists/bill`)}
+                  tabindex="0"
+                >
+                  <p><strong>Time:</strong> {app.slot}</p>
+                  <p><strong>Patient:</strong> {app.patient}</p>
+                  <p><strong>Doctor:</strong> {app.doctor}</p>
+                </div>
+              {/each}
+            {:else}
               <div
-                class="appointment-card-button"
+                class="appointment-card-button available"
                 on:click={() => goto(`/receptionists/bill`)}
                 tabindex="0"
               >
-                <p><strong>Time:</strong> {app.slot}</p>
-                <p><strong>Patient:</strong> {app.patient}</p>
-                <p><strong>Doctor:</strong> {app.doctor}</p>
+                <p><strong>Time:</strong> {time}</p>
+                <p class="no-appointments">Available</p>
               </div>
-            {/each}
-          {:else}
-            <div
-              class="appointment-card-button available"
-              on:click={() => goto(`/receptionists/bill`)}
-              tabindex="0"
-            >
-              <p><strong>Time:</strong> {time}</p>
-              <p class="no-appointments">Available</p>
-            </div>
-          {/if}
-        {/each}
-      </div>
-    {/each}
+            {/if}
+          {/each}
+        </div>
+      {/each}
+    </div>
   </div>
 </div>
 

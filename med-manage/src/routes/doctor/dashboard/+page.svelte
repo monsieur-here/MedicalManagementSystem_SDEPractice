@@ -100,10 +100,10 @@
     width: 100%;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     transition: transform 0.2s ease;
+    cursor: pointer;
   }
 
   .prescription-card:hover {
-    transform: scale(1.02);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   }
 

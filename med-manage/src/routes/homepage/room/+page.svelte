@@ -2,13 +2,17 @@
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
 
-  $: user_type = $page.url.searchParams.get("user_type");
-  let patientName = "";
-  let admissionDate = "";
-  let roomType = "";
-  let roomNumber = "";
-  let notes = "";
-  let message = "";
+    $: user_type = $page.url.searchParams.get("user_type");
+    let appointmentId = 0;
+	let roomAvailability="";
+	let patient_id=0;
+    let patientName = "";
+	let check_in="";
+	let check_out="";
+    let roomType = "";
+    let roomNumber = "";
+    let notes = "";
+    let message = "";
 
   // Simulated available rooms/beds
   /** @type {{ [key: string]: string[] }} */
@@ -63,9 +67,56 @@
       notes,
     };
 
-    alert("🎉 Room Booked successfully!");
-    goto(`/homepage?user_type=Staff`);
-  }
+    // Dynamically update available room numbers
+    // In plain JavaScript, no type assertion is needed here.
+    // The runtime behavior remains the same.
+    $: roomOptions = availableRooms[roomType]?.length
+        ? availableRooms[roomType]
+        : [];
+
+    function handleRoomBooking() {
+        if (!patientName || !check_in || !roomType || !roomNumber) {
+            message = "⚠️ Please fill in all required fields.";
+            return;
+        }
+
+        const now = new Date();
+        const selectedDate = new Date(check_in);
+        const tenDaysFromNow = new Date();
+        tenDaysFromNow.setDate(now.getDate() + 10);
+        const today = new Date(now.setHours(0, 0, 0, 0));
+
+	// Check if the selected date is before today
+	if (selectedDate < today) {
+		message = "❌ Cannot select a past date.";
+		return;
+	}
+    
+
+        // Check if date is more than 10 days in future
+        if (selectedDate > tenDaysFromNow) {
+            message = "❌ You can only book rooms up to 10 days in advance.";
+            return;
+        }
+
+        // If booking for today, ensure it's not before the current time
+        const isToday =
+            selectedDate.toDateString() === new Date().toDateString();
+        if (isToday && now.getHours() >= 23) {
+            message = "❌ Too late to book a room for today.";
+            return;
+        }
+
+        const details = {
+            patientName,
+            check_in,
+            roomType,
+            notes,
+        };
+
+        alert("🎉 Room Booked successfully!");
+        goto(`/homepage?user_type=Staff`);
+    }
 </script>
 
 <div class="header">
@@ -80,18 +131,18 @@
       <input type="text" bind:value={patientName} required />
     </label>
 
-    <label>
-      Admission Date:
-      <input
-        type="date"
-        bind:value={admissionDate}
-        required
-        min={new Date().toISOString().split("T")[0]}
-        max={new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)
-          .toISOString()
-          .split("T")[0]}
-      />
-    </label>
+        <label>
+            Admission Date:
+            <input
+                type="date"
+                bind:value={check_in}
+                required
+                min={new Date().toISOString().split("T")[0]}
+                max={new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)
+                    .toISOString()
+                    .split("T")[0]}
+            />
+        </label>
 
     <label>
       Room Type:

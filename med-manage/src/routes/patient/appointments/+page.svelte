@@ -2,8 +2,9 @@
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import { PATIENT_ROUTES } from "$lib/routes";
+  import { onMount } from "svelte";
+  import { createAppointment } from "../../../apis/patient/appointment";
 
-  $: user_type = $page.url.searchParams.get("user_type");
   let doctors = [
     {
       id: 1,
@@ -15,6 +16,30 @@
       id: 2,
       name: "Dr. Jane Doe",
       specialty: "Dermatologist",
+      schedule: ["2025-06-10 11:00", "2025-06-12 15:00"],
+    },
+    {
+      id: 3,
+      name: "Dr. Dane Marsch",
+      specialty: "Cardiologist",
+      schedule: ["2025-06-10 11:00", "2025-06-12 15:00"],
+    },
+    {
+      id: 4,
+      name: "Dr. Peter Smith",
+      specialty: "Dermatologist",
+      schedule: ["2025-06-10 11:00", "2025-06-12 15:00"],
+    },
+    {
+      id: 5,
+      name: "Dr. Andrea Backer",
+      specialty: "General Physician",
+      schedule: ["2025-06-10 11:00", "2025-06-12 15:00"],
+    },
+    {
+      id: 6,
+      name: "Dr. Daniel Christian",
+      specialty: "Neurologist",
       schedule: ["2025-06-10 11:00", "2025-06-12 15:00"],
     },
   ];
@@ -29,60 +54,30 @@
   let reason = "";
   let specialist = "";
 
-  function handleBooking() {
-    if (!selectedDoctor || !selectedTime) {
-      bookingMessage = "Please select a doctor and a time slot.";
+  let loginUser = null;
+
+  onMount(() => {
+    loginUser = JSON.parse(window.localStorage.getItem("user_data"));
+  });
+
+  async function handleBooking(e) {
+    const data = new FormData(e.currentTarget);
+
+    if (!data.get("specialist")) {
+      bookingMessage = "Please select a doctor!";
       return;
     }
 
-    const selectedDateTime = new Date(selectedTime);
-    const now = new Date();
-
-    if (selectedDateTime < now) {
-      bookingMessage = "❌ You cannot book an appointment in the past.";
-      return;
-    }
-
-    const details = {
-      name,
-      date: selectedTime.split(" ")[0], // extracts date
-      time: selectedTime.split(" ")[1], // extracts time
-      reason,
-      specialist,
+    const payload = {
+      user_id: loginUser?.id,
+      doctor_id: Number(data.get("specialist")),
+      notes: data.get("reason"),
     };
 
-    const query = new URLSearchParams(details).toString();
-    goto(`/dashboard/appointments/confirm?${query}`);
+    const response = await createAppointment(payload);
+
+    console.log(response);
   }
-
-  function bookAppointment() {
-    if (!selectedDoctor || !selectedTime) {
-      bookingMessage = "Please select a future time slot.";
-      return;
-    }
-
-    bookingMessage = `✅ Appointment booked with ${selectedDoctor} at ${selectedTime}`;
-    selectedDoctor = "";
-    selectedTime = "";
-  }
-
-  $: filteredDoctors = doctors.map((doctor) => {
-    const slotsForDate = doctor.schedule.filter((slot) => {
-      const [slotDate] = slot.split(" ");
-      const today = new Date().toISOString().split("T")[0];
-
-      // Only match slots for the selected date
-      if (!date || slotDate !== date) return false;
-
-      // Ensure time is not in the past if it's today
-      const slotDateTime = new Date(slot);
-      const now = new Date();
-
-      return slotDateTime >= now;
-    });
-
-    return { ...doctor, filteredSchedule: slotsForDate };
-  });
 </script>
 
 <div class="header">
@@ -94,44 +89,26 @@
 <!-- Form Fields Only -->
 <form on:submit|preventDefault={handleBooking}>
   <div class="form-section">
-    <input placeholder="Patient Name" bind:value={name} required />
-    <input type="date" bind:value={date} required />
-    <input placeholder="Reason for Appointment" bind:value={reason} required />
-    <select bind:value={specialist} required>
-      <option value="" disabled selected>Select Specialist</option>
-      <option>Cardiologist</option>
-      <option>Dermatologist</option>
-      <option>General Physician</option>
-      <option>Neurologist</option>
-    </select>
-  </div>
+    <div style="padding-left: 12px;">
+      <p>
+        {`- ${loginUser?.firstName} ${loginUser?.lastName}`}
+      </p>
+      <p>- {loginUser?.email}</p>
+    </div>
 
-  <!-- Doctor Cards -->
-  <div class="doctors">
-    {#each filteredDoctors as doctor (doctor.id)}
-      {#if doctor.filteredSchedule.length > 0}
-        <div class="card">
-          <h2>{doctor.name}</h2>
-          <p><strong>Specialty:</strong> {doctor.specialty}</p>
-          <p><strong>Available Slots:</strong></p>
-          <ul>
-            {#each doctor.filteredSchedule as slot}
-              <li>
-                <input
-                  type="radio"
-                  name="appointment"
-                  id="{doctor.id}-{slot}"
-                  value={slot}
-                  bind:group={selectedTime}
-                  on:change={() => (selectedDoctor = doctor.name)}
-                />
-                <label for="{doctor.id}-{slot}">{slot}</label>
-              </li>
-            {/each}
-          </ul>
-        </div>
-      {/if}
-    {/each}
+    <input
+      placeholder="Reason for Appointment"
+      name="reason"
+      bind:value={reason}
+      required
+    />
+
+    <select bind:value={specialist} name="specialist" required>
+      <option value="" disabled selected>Select Specialist</option>
+      {#each doctors as doc (doc.id)}
+        <option value={doc.id}>{`${doc.name} (${doc.specialty})`}</option>
+      {/each}
+    </select>
   </div>
 
   <!-- Confirmation Button at End -->
@@ -172,20 +149,6 @@
     padding: 0.6rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-  }
-
-  .doctors {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .card {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 1rem;
-    background: #f9f9f9;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
 
   .confirm-button {

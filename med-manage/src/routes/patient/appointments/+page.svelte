@@ -77,7 +77,12 @@
 
     const response = await createAppointment(payload);
 
-    console.log(response);
+    if (response.code === 200) {
+      alert("Appointment Request has been sent successfully!");
+      goto(PATIENT_ROUTES.dashboard.url);
+    } else {
+      alert("Oops, something went wrong while creating appointment!");
+    }
   }
 </script>
 

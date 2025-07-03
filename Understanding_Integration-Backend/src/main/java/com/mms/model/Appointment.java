@@ -16,7 +16,7 @@ import java.util.Date;
 //	private String status;
 	
 	public class Appointment {
-		private int appointmentId;
+		private int id;
 	    private Date slot;
 	    private Integer patientId;
 	    private String patientName;
@@ -26,14 +26,37 @@ import java.util.Date;
 	    private String specialist;	// can be null for Receptionists
 	    private String status;
 
+		private String notes;
+
 	    public Appointment() {}
 
-		public int getAppointmentId() {
-			return appointmentId;
+		public Appointment(int id, Date slot, Integer patientId, String patientName, String visitDescription, Integer doctorId, String doctorName, String specialist, String status, String notes) {
+			this.id = id;
+			this.slot = slot;
+			this.patientId = patientId;
+			this.patientName = patientName;
+			this.visitDescription = visitDescription;
+			this.doctorId = doctorId;
+			this.doctorName = doctorName;
+			this.specialist = specialist;
+			this.status = status;
+			this.notes = notes;
 		}
 
-		public void setAppointmentId(int appointmentId) {
-			this.appointmentId = appointmentId;
+		public String getNotes() {
+			return notes;
+		}
+
+		public void setNotes(String notes) {
+			this.notes = notes;
+		}
+
+		public int getId() {
+			return id;
+		}
+
+		public void setId(int id) {
+			this.id = id;
 		}
 
 		public Date getSlot() {

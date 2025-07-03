@@ -52,41 +52,104 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
     @Override
     public boolean addAppointment(Appointment appointment) throws SQLException {
-        String sql = "INSERT INTO appointment(slot, patient_id, patient_name, visit_description, doctor_id, doctor_name, specialist, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setTimestamp(1, new Timestamp(appointment.getSlot().getTime()));
-            if (appointment.getPatientId() != null) ps.setInt(2, appointment.getPatientId());
-            else ps.setNull(2, Types.INTEGER);
-            ps.setString(3, appointment.getPatientName());
-            ps.setString(4, appointment.getVisitDescription());
-            if (appointment.getDoctorId() != null) ps.setInt(5, appointment.getDoctorId());
-            else ps.setNull(5, Types.INTEGER);
-            ps.setString(6, appointment.getDoctorName());
-            ps.setString(7, appointment.getSpecialist());
-            ps.setString(8, appointment.getStatus());
-            return ps.executeUpdate() > 0;
-        }
+//        String sql = "INSERT INTO appointment(slot, patient_id, patient_name, visit_description, doctor_id, doctor_name, specialist, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+//        try (Connection con = DBConnection.getConnection();
+//             PreparedStatement ps = con.prepareStatement(sql)) {
+//            ps.setTimestamp(1, new Timestamp(appointment.getSlot().getTime()));
+//            if (appointment.getPatientId() != null) ps.setInt(2, appointment.getPatientId());
+//            else ps.setNull(2, Types.INTEGER);
+//            ps.setString(3, appointment.getPatientName());
+//            ps.setString(4, appointment.getVisitDescription());
+//            if (appointment.getDoctorId() != null) ps.setInt(5, appointment.getDoctorId());
+//            else ps.setNull(5, Types.INTEGER);
+//            ps.setString(6, appointment.getDoctorName());
+//            ps.setString(7, appointment.getSpecialist());
+//            ps.setString(8, appointment.getStatus());
+//            return ps.executeUpdate() > 0;
+//        }
+        return false;
     }
+
+
+
+
+    public Appointment bookAppointment(Appointment appointment) throws SQLException {
+
+            String sql = "INSERT INTO appointments(patient_id, doctor_id, status, notes) VALUES (?, ?, ?, ?)";
+            try (Connection con = DBConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+//            ps.setTimestamp(1, appointment.getSlot());
+//                ps.setInt(1, appointment.getSlot());
+//            if (appointment.getPatientId() != null) ps.setInt(2, appointment.getPatientId());
+//            else ps.setNull(2, Types.INTEGER);
+                ps.setInt(1, appointment.getPatientId());
+                ps.setInt(2, appointment.getDoctorId());
+//                ps.setDate(4, appointment.getAppointmentDate());
+
+
+
+                ps.setString(3, "REQUESTED");
+                ps.setString(4, appointment.getNotes());
+                System.out.println(ps.executeUpdate() > 0);
+
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        appointment.setId(generatedKeys.getInt(1)); // Set ID to the user object
+                    }
+                }
+                return appointment;
+            }
+
+
+    }
+
+//    private boolean checkAppointmentAvalibility(Date appointmentDate, Integer slot, Integer doctorId) throws SQLException {
+//        String sql = "SELECT * from INTO appointments WHERE (slot, patient_id, doctor_id, appointment_date, status, notes) VALUES (?, ?, ?, ?, ?, ?)";
+//        try (Connection con = DBConnection.getConnection();
+//             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+////            ps.setTimestamp(1, appointment.getSlot());
+//            ps.setInt(1, appointment.getSlot());
+////            if (appointment.getPatientId() != null) ps.setInt(2, appointment.getPatientId());
+////            else ps.setNull(2, Types.INTEGER);
+//            ps.setInt(2, appointment.getPatientId());
+//            ps.setInt(3, appointment.getDoctorId());
+//            ps.setDate(4, appointment.getAppointmentDate());
+//
+//
+//            ps.setString(5, appointment.getStatus());
+//            ps.setString(6, appointment.getNotes());
+//            System.out.println(ps.executeUpdate() > 0);
+//
+//            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+//                if (generatedKeys.next()) {
+//                    appointment.setId(generatedKeys.getInt(1)); // Set ID to the user object
+//                }
+//            }
+//            return appointment;
+//
+//
+//        }
+//    }
 
     @Override
     public boolean updateAppointment(Appointment appointment) throws SQLException {
-        String sql = "UPDATE appointment SET slot = ?, patient_id = ?, patient_name = ?, visit_description = ?, doctor_id = ?, doctor_name = ?, specialist = ?, status = ? WHERE appointment_id = ?";
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setTimestamp(1, new Timestamp(appointment.getSlot().getTime()));
-            if (appointment.getPatientId() != null) ps.setInt(2, appointment.getPatientId());
-            else ps.setNull(2, Types.INTEGER);
-            ps.setString(3, appointment.getPatientName());
-            ps.setString(4, appointment.getVisitDescription());
-            if (appointment.getDoctorId() != null) ps.setInt(5, appointment.getDoctorId());
-            else ps.setNull(5, Types.INTEGER);
-            ps.setString(6, appointment.getDoctorName());
-            ps.setString(7, appointment.getSpecialist());
-            ps.setString(8, appointment.getStatus());
-            ps.setInt(9, appointment.getAppointmentId());
-            return ps.executeUpdate() > 0;
-        }
+//        String sql = "UPDATE appointment SET slot = ?, patient_id = ?, patient_name = ?, visit_description = ?, doctor_id = ?, doctor_name = ?, specialist = ?, status = ? WHERE appointment_id = ?";
+//        try (Connection con = DBConnection.getConnection();
+//             PreparedStatement ps = con.prepareStatement(sql)) {
+//            ps.setTimestamp(1, new Timestamp(appointment.getSlot().getTime()));
+//            if (appointment.getPatientId() != null) ps.setInt(2, appointment.getPatientId());
+//            else ps.setNull(2, Types.INTEGER);
+//            ps.setString(3, appointment.getPatientName());
+//            ps.setString(4, appointment.getVisitDescription());
+//            if (appointment.getDoctorId() != null) ps.setInt(5, appointment.getDoctorId());
+//            else ps.setNull(5, Types.INTEGER);
+//            ps.setString(6, appointment.getDoctorName());
+//            ps.setString(7, appointment.getSpecialist());
+//            ps.setString(8, appointment.getStatus());
+//            ps.setInt(9, appointment.getAppointmentId());
+//            return ps.executeUpdate() > 0;
+//        }
+        return false;
     }
 
     @Override
@@ -220,18 +283,30 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         return false;
     }
 
+//    private Appointment mapRowToAppointment(ResultSet rs) throws SQLException {
+//        Appointment app = new Appointment();
+//        app.setAppointmentId(rs.getInt("appointment_id"));
+//        app.setSlot(rs.getDate("slot"));
+//        app.setPatientId(rs.getInt("patient_id"));
+//        app.setPatientName(rs.getString("patient_name"));
+//        app.setVisitDescription(rs.getString("visit_description"));
+//        app.setDoctorId(rs.getInt("doctor_id"));
+//        app.setDoctorName(rs.getString("doctor_name"));
+//        app.setSpecialist(rs.getString("specialist"));
+//        app.setStatus(rs.getString("status"));
+//        return app;
+//    }
+
     private Appointment mapRowToAppointment(ResultSet rs) throws SQLException {
-        Appointment app = new Appointment();
-        app.setAppointmentId(rs.getInt("appointment_id"));
-        app.setSlot(rs.getDate("slot"));
-        app.setPatientId(rs.getInt("patient_id"));
-        app.setPatientName(rs.getString("patient_name"));
-        app.setVisitDescription(rs.getString("visit_description"));
-        app.setDoctorId(rs.getInt("doctor_id"));
-        app.setDoctorName(rs.getString("doctor_name"));
-        app.setSpecialist(rs.getString("specialist"));
-        app.setStatus(rs.getString("status"));
-        return app;
+        Appointment appointment = new Appointment();
+
+        appointment.setId(rs.getInt("id"));
+        appointment.setPatientId(rs.getInt("patient_id"));
+        appointment.setDoctorId(rs.getInt("doctor_id"));
+        appointment.setStatus(rs.getString("status"));
+        appointment.setAppointmentDate(rs.getDate("appointment_date"));
+
+        return appointment;
     }
     
     @Override
@@ -252,12 +327,12 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
             while (rs.next()) {
                 Appointment appt = new Appointment();
-                appt.setAppointmentId(rs.getInt("id"));
+//                appt.setAppointmentId(rs.getInt("id"));
                 appt.setPatientId(rs.getInt("patient_id"));
                 appt.setDoctorId(rs.getInt("doctor_id"));
 //                appt.setRoomId(rs.getInt("room_id"));
                 
-                appt.setSlot(new java.util.Date(ts.getTime()));
+//                appt.setSlot(new java.util.Date(ts.getTime()));
                 appt.setStatus(rs.getString("status"));
                 appointments.add(appt);
             }
@@ -286,5 +361,44 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		// TODO Auto-generated method stub
 		return false;
 	}
-    
+    @Override
+    public List<Appointment> getAllAppointmentsForReceptionist() throws SQLException {
+        List<Appointment> appointments = new ArrayList<>();
+        String sql = "SELECT * FROM appointment where status = 'REQUESTED'";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Appointment app = mapRowToAppointment(rs);
+                appointments.add(app);
+            }
+        }
+        return appointments;
+    }
+    //get appoiment api dao implemetoion
+    @Override
+    public List<Appointment> getAllAppointmentsForDoctor(String doctorId) throws SQLException {
+        List<Appointment> appointments = new ArrayList<>();
+        String sql = "SELECT * FROM appointments WHERE doctor_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, doctorId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    appointments.add(mapRowToAppointment(rs));
+//                    Appointment appointment = new Appointment();
+//                    appointment.setStatus(rs.getString("status"));
+//                    appointments.add(appointment);
+                }
+            }
+        }
+
+        return appointments;
+    }
 }
+

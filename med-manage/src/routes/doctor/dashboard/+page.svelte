@@ -9,43 +9,41 @@
 
   let prescriptionData = [];
 
-  onMount(() => {
-    const getAPITrigger = async () => {
-      const requestOptions = {
-        method: "GET",
-        redirect: "follow",
-      };
-
-      try {
-        const response = await fetch(
-          BASE_API_URL + "/patient/prescription?pageNo=1&pageSize=20",
-          requestOptions
-        );
-
-        const result = await response.json();
-
-        prescriptionData = result;
-      } catch (error) {
-        console.error(error);
-        return error;
-      }
-
-      // prescriptionData = await getPrescription({
-      //   pageNo: page,
-      //   pageSize,
-      // });
-    };
-
-    getAPITrigger();
+  onMount(async () => {
+    prescriptionData = await getPrescription();
   });
-
-  console.log("====", prescriptionData);
 </script>
 
 <div class="header">
   <a href={DOCTORS_ROUTES.dashboard.url} class="home-button">Back</a>
   <h1 class="title">🩺 Doctor Dashboard</h1>
   <button class="logout-button" on:click={handleLogOut}>Logout</button>
+</div>
+
+<div class="dashboard">
+  <div class="prescription-container">
+    {#each prescriptionData as presc}
+      <div class="prescription-card">
+        <div class="prescription-title">{presc.prescriptionName}</div>
+        <div>
+          <span class="label">Medication:</span>
+          <span class="value">{presc.medication}</span>
+        </div>
+        <div>
+          <span class="label">Dosage:</span>
+          <span class="value">{presc.dosage}</span>
+        </div>
+        <div>
+          <span class="label">Frequency:</span>
+          <span class="value">{presc.frequency}</span>
+        </div>
+        <div>
+          <span class="label">Criticality:</span>
+          <span class="value">{presc.criticality}</span>
+        </div>
+      </div>
+    {/each}
+  </div>
 </div>
 
 <style>
@@ -85,5 +83,49 @@
   }
   .logout-button:hover {
     background-color: #c82333;
+  }
+
+  .prescription-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .prescription-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1rem;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease;
+  }
+
+  .prescription-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .prescription-card div {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .prescription-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    color: #333;
+  }
+
+  .label {
+    font-weight: 500;
+    color: #555;
+  }
+
+  .value {
+    font-weight: 400;
+    color: #222;
   }
 </style>

@@ -13,9 +13,9 @@ export const getPrescription = async (payload) => {
       requestOptions
     );
 
-    const result = await response.json();
+    const result = await response.text();
 
-    return result;
+    return JSON.parse(result);
   } catch (error) {
     console.error(error);
     return error;

@@ -36,19 +36,19 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         return list;
     }
 
-    @Override
-    public Appointment getAppointmentById(int appointmentId) throws SQLException {
-        String sql = "SELECT * FROM appointment WHERE appointment_id = ?";
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, appointmentId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return mapRowToAppointment(rs);
-            }
-        }
-        return null;
-    }
+//    @Override
+//    public Appointment getAppointmentById(int appointmentId) throws SQLException {
+//        String sql = "SELECT * FROM appointment WHERE appointment_id = ?";
+//        try (Connection con = DBConnection.getConnection();
+//             PreparedStatement ps = con.prepareStatement(sql)) {
+//            ps.setInt(1, appointmentId);
+//            ResultSet rs = ps.executeQuery();
+//            if (rs.next()) {
+//                return mapRowToAppointment(rs);
+//            }
+//        }
+//        return null;
+//    }
 
     @Override
     public boolean addAppointment(Appointment appointment) throws SQLException {
@@ -364,15 +364,14 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     @Override
     public List<Appointment> getAllAppointmentsForReceptionist() throws SQLException {
         List<Appointment> appointments = new ArrayList<>();
-        String sql = "SELECT * FROM appointment where status = 'REQUESTED'";
+        String sql = "SELECT * FROM appointments where status = 'REQUESTED'";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                Appointment app = mapRowToAppointment(rs);
-                appointments.add(app);
+                appointments.add(mapRowToAppointment(rs));
             }
         }
         return appointments;
@@ -386,19 +385,51 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, doctorId);
+            int doctorIdInt = Integer.parseInt(doctorId);
+            pstmt.setInt(1, doctorIdInt);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     appointments.add(mapRowToAppointment(rs));
-//                    Appointment appointment = new Appointment();
-//                    appointment.setStatus(rs.getString("status"));
-//                    appointments.add(appointment);
+                }
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Doctor ID must be a number: " + doctorId);
+            return appointments;
+        }
+        return appointments;
+    }
+    @Override
+    public boolean updateAppointment(int appointmentId, String status, Timestamp appointmentDate) throws SQLException
+    {
+        String sql = "UPDATE appointments SET status = ?, appointment_date = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, status);
+            pstmt.setTimestamp(2, appointmentDate);
+            pstmt.setInt(3, appointmentId);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected == 1;
+        }
+    }
+    @Override
+    public Appointment getAppointmentById(int appointmentId) throws SQLException {
+        String sql = "SELECT * FROM appointments WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, appointmentId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                // If we found a result, map it to an object and return it.
+                if (rs.next()) {
+                    return mapRowToAppointment(rs);
                 }
             }
         }
-
-        return appointments;
+        // If no appointment was found with that ID, return null.
+        return null;
     }
-}
+    }
+
 

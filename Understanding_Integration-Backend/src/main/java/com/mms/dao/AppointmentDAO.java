@@ -3,13 +3,15 @@ package com.mms.dao;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
+import java.sql.Timestamp;
+
 
 import com.mms.model.Appointment;
 import com.mms.model.Room;
 
 public interface AppointmentDAO {
 	List<Appointment> getAppointments(int pageNo, int pageSize) throws SQLException;
-    Appointment getAppointmentById(int appointmentId) throws SQLException;
+    //Appointment getAppointmentById(int appointmentId) throws SQLException;
     boolean addAppointment(Appointment appointment) throws SQLException;
     boolean updateAppointment(Appointment appointment) throws SQLException;
     boolean deleteAppointment(int appointmentId) throws SQLException;
@@ -34,5 +36,10 @@ public interface AppointmentDAO {
 
     // get appointments for docter
     List<Appointment> getAllAppointmentsForDoctor(String doctorId) throws SQLException;
+
+    //update appointments details by receptionist
+    boolean updateAppointment(int appointmentId, String status, Timestamp appointmentDate) throws SQLException;
+    Appointment getAppointmentById(int appointmentId) throws SQLException;
+
 }
 

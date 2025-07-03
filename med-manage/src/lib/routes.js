@@ -26,8 +26,13 @@ export const PATIENT_ROUTES = {
   },
   prescriptions: {
     title: "Prescriptions",
-    description: "Patient prescription",
-    url: "/patient/prescription",
+    description: "Patient prescriptions",
+    url: "/patient/prescriptions",
+  },
+  reports: {
+    title: "Reports",
+    description: "Patient Medical Reports",
+    url: "/patient/reports",
   },
 };
 

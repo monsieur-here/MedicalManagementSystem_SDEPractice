@@ -1,40 +1,35 @@
 <script>
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
   import { PATIENT_ROUTES } from "$lib/routes";
 
-  $: user_type = $page.url.searchParams.get("user_type");
+  const reports = [
+    { id: 1, title: "Blood Test", date: "2025-05-15" },
+    { id: 2, title: "X-Ray Chest", date: "2025-05-20" },
+    { id: 3, title: "MRI Brain", date: "2025-05-25" },
+  ];
 
-  const user = {
-    name: "John Doe",
-    patientId: "P123456",
-  };
+  /**
+   * @param {number} id
+   */
+  function viewReport(id) {
+    goto(`/dashboard/reports/${id}`);
+  }
 </script>
 
 <div class="header">
-  <a href={PATIENT_ROUTES.dashboard.url} class="home-button">Home</a>
-
-  <h1 class="title">🏥 Welcome to MedCare Portal</h1>
-
+  <a href={PATIENT_ROUTES.dashboard.url} class="home-button">Back</a>
+  <h1 class="title">Medical Reports</h1>
   <a href="/" class="logout-button">Logout</a>
 </div>
 
 <div class="dashboard">
-  <p style="text-align: center;">Patient ID: {user.patientId}</p>
-
-  <div class="card-container">
-    <div class="card">
-      <a href={PATIENT_ROUTES.appointments.url}>📅 Book Appointment</a>
-    </div>
-
-    <div class="card">
-      <a href={PATIENT_ROUTES.prescriptions.url}>📄 View Prescriptions</a>
-    </div>
-
-    <div class="card">
-      <a href={PATIENT_ROUTES.reports.url}>🧪 Medical Reports</a>
-    </div>
-  </div>
+  <ul class="list">
+    {#each reports as report}
+      <li style="text-align: center;" on:click={() => viewReport(report.id)}>
+        <strong>{report.title}</strong> — {report.date}
+      </li>
+    {/each}
+  </ul>
 </div>
 
 <style>
@@ -47,39 +42,35 @@
     background-color: #f1f1f1;
     font-family: Arial, sans-serif;
   }
-
-  h1 {
-    text-align: center;
+  .list {
+    list-style: none;
+    padding: 0;
+    max-width: 400px;
+    margin: 1rem auto;
   }
-
-  .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-top: 2rem;
-  }
-
-  .card {
-    background: #f9f9f9;
-    border-radius: 10px;
-    padding: 1.5rem;
-    width: 220px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  .list li {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: background 0.2s;
   }
-
-  .card:hover {
-    transform: scale(1.05);
-    background: #e6f0ff;
+  .list li:hover {
+    background-color: #f0f8ff;
   }
-
-  a {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
+  button {
+    display: block;
+    margin: 2rem auto 0;
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #2b8df7;
   }
   .header {
     display: flex;

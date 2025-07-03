@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import { page } from "$app/stores";
   import { handleLogOut } from "$lib/utils";
+  import { DOCTORS_ROUTES } from "$lib/routes";
 
   $: user_type = $page.url.searchParams.get("user_type");
   let staff_type = "Receptionist";
@@ -81,7 +82,7 @@
 </script>
 
 <div class="header">
-  <a href={`/homepage?user_type=Doctor`} class="home-button">Back</a>
+  <a href={DOCTORS_ROUTES.diagnosis.url} class="home-button">Back</a>
   <h1 class="title">🩺 Patient Diagnosis</h1>
   <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>

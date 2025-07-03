@@ -70,4 +70,9 @@ export const DOCTORS_ROUTES = {
     description: "Doctor prescription",
     url: "/doctor/prescription",
   },
+  diagnosis: {
+    title: "Diagnosis",
+    description: "Doctor diagnosis",
+    url: "/doctor/diagnosis",
+  },
 };

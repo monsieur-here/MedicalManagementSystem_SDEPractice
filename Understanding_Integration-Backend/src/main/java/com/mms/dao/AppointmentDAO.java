@@ -31,4 +31,8 @@ public interface AppointmentDAO {
 
     //get appointmets for receptonist
     List<Appointment> getAllAppointmentsForReceptionist() throws SQLException;
+
+    // get appointments for docter
+    List<Appointment> getAllAppointmentsForDoctor(String doctorId) throws SQLException;
 }
+

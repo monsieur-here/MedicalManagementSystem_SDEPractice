@@ -3,17 +3,22 @@
   import { onMount } from "svelte";
   import { page } from "$app/stores";
 
-  $: user_type = $page.url.searchParams.get("user_type");
-  let staff_type = "Receptionist";
-  $: if (user_type) staff_type = user_type;
+	let appointmentId = "";
+	let diagnosis = "";
+	let successMessage = "";
+	let criticality="";
+	/**
+     * @type {any[]}
+     */
+	let medications = [];
 
-  let appointmentId = "";
-  let diagnosis = "";
-  let successMessage = "";
-  /**
-   * @type {any[]}
-   */
-  let medications = [];
+	let newMed = {
+		name: "",
+		dosage:"",
+		frequency:"",
+		dateIssued: "",
+		description: ""
+	};
 
   let newMed = {
     name: "",
@@ -41,6 +46,23 @@
 
     const issuedDate = new Date(newMed.dateIssued);
     issuedDate.setHours(0, 0, 0, 0); // Remove time part
+	if (issuedDate < today) {
+		successMessage = "⚠️ Medication issue date cannot be in the past.";
+		return;
+	}
+	// Validate appointment ID is numeric
+	if (!/^\d+$/.test(appointmentId)) {
+		successMessage = "⚠️ Appointment ID must contain numbers only.";
+		return;
+	}
+	
+	medications.push({ ...newMed });
+	newMed = { name: "", dosage:"", frequency:"", dateIssued: "", description: "" };
+	successMessage = ""; // Clear any previous error
+		if (!appointmentId || !diagnosis || medications.length === 0) {
+			successMessage = "⚠️ Please fill out all fields and add at least one medication.";
+			return;
+		}
 
     if (issuedDate < today) {
       successMessage = "⚠️ Medication issue date cannot be in the past.";

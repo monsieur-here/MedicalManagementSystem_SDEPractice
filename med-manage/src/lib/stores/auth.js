@@ -1,16 +1,29 @@
 import { writable } from "svelte/store";
 import { browser } from "$app/environment";
+import { goto } from "$app/navigation";
+
+import { BASE_API_URL } from "$lib/config.js";
+import { ConvertToJSONFromStream } from "$lib/utils";
+import {
+  AUTH_ROUTES,
+  DOCTORS_ROUTES,
+  PATIENT_ROUTES,
+  RECEPTIONIST_ROUTES,
+} from "$lib/routes";
 
 // Create user store
 function createUserStore() {
-  const { subscribe, set, update } = writable(null);
+  const { subscribe, set, update } = writable({
+    isAuthenticated: false,
+    user: null,
+    loading: false,
+  });
 
   return {
     subscribe,
     login: async (email, password) => {
       try {
-        // TODO: update it with actual api
-        const response = await fetch("/api/auth/login", {
+        const response = await fetch(BASE_API_URL + "/patient/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -18,34 +31,50 @@ function createUserStore() {
           body: JSON.stringify({ email, password }),
         });
 
-        if (!response.ok) {
+        const userData = await ConvertToJSONFromStream(response);
+
+        if (!userData.code === 200) {
           throw new Error("Invalid credentials");
         }
 
-        const userData = await response.json();
-
         // Store token in localStorage
-        if (browser) {
-          localStorage.setItem("token", userData.token);
+        if (browser && userData?.data?.user?.email) {
+          localStorage.setItem(
+            "user_data",
+            JSON.stringify(userData?.data?.user)
+          );
+
+          const redirectURL =
+            userData.data?.user?.role === "ROLE_PATIENT"
+              ? PATIENT_ROUTES.dashboard.url
+              : userData.data?.user?.role === "ROLE_RECEPTIONED"
+              ? RECEPTIONIST_ROUTES.dashboard.url
+              : userData.data?.user?.role === "ROLE_DOCTOR"
+              ? DOCTORS_ROUTES.dashboard.url
+              : null;
+
+          goto(redirectURL);
         }
 
-        set(userData.user);
+        set({
+          isAuthenticated: true,
+          user: userData?.data?.user,
+          loading: false,
+        });
         return { success: true };
       } catch (error) {
         return { success: false, error: error.message };
       }
     },
 
-    register: async (email, password, name) => {
+    register: async (postObj) => {
       try {
-        // TODO: update it with actual api
-
-        const response = await fetch("/api/auth/register", {
+        const response = await fetch(BASE_API_URL + "/patient/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, password, name }),
+          body: JSON.stringify(postObj),
         });
 
         if (!response.ok) {
@@ -54,12 +83,16 @@ function createUserStore() {
 
         const userData = await response.json();
 
-        if (browser) {
-          localStorage.setItem("token", userData.token);
+        if (browser && userData?.data?.user?.email) {
+          localStorage.setItem("user_data", JSON.stringify(userData.data.user));
         }
 
-        set(userData.user);
-        return { success: true };
+        set({
+          isAuthenticated: true,
+          user: userData?.data?.user,
+          loading: false,
+        });
+        return userData;
       } catch (error) {
         return { success: false, error: error.message };
       }
@@ -67,35 +100,34 @@ function createUserStore() {
 
     logout: () => {
       if (browser) {
-        localStorage.removeItem("token");
+        localStorage.removeItem("user_data");
       }
-      set(null);
+      set({
+        isAuthenticated: false,
+        user: null,
+        loading: false,
+      });
     },
 
     checkAuth: async () => {
       if (!browser) return;
 
-      const token = localStorage.getItem("token");
-      if (!token) return;
+      const userData = JSON.parse(localStorage.getItem("user_data"));
+      if (!userData?.email) return;
 
       try {
-        // TODO: update it with actual api
-
-        const response = await fetch("/api/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const userData = await response.json();
-          set(userData.user);
+        if (userData?.email) {
+          set({
+            isAuthenticated: true,
+            user: userData,
+            loading: false,
+          });
         } else {
-          localStorage.removeItem("token");
+          localStorage.removeItem("user_data");
         }
       } catch (error) {
         console.error("Auth check failed:", error);
-        localStorage.removeItem("token");
+        localStorage.removeItem("user_data");
       }
     },
   };

@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Understanding_Integration-Backend/src/main/webapp/WEB-INF/lib/mysql-connector-j-9.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Understanding_Integration-Backend/src/main/webapp/WEB-INF/lib/gson-2.13.1.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/jakarta.servlet-api-6.0.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/javax.json-1.1.4.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/javax.json-api-1.1.4.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/json-20240303.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -304,7 +304,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         appointment.setPatientId(rs.getInt("patient_id"));
         appointment.setDoctorId(rs.getInt("doctor_id"));
         appointment.setStatus(rs.getString("status"));
-        appointment.setAppointmentDate(rs.getDate("appointment_date"));
+//        appointment.setAppointmentDate(rs.getDate("appointment_date"));
 
         return appointment;
     }

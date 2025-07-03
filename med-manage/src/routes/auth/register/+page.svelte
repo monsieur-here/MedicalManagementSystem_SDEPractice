@@ -1,18 +1,28 @@
 <script>
+  import { goto } from "$app/navigation";
+  import {
+    AUTH_ROUTES,
+    DOCTORS_ROUTES,
+    PATIENT_ROUTES,
+    RECEPTIONIST_ROUTES,
+  } from "$lib/routes";
   import { user } from "$lib/stores/auth.js";
+  import { ConvertToJSONFromStream } from "$lib/utils";
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
 
   let name = "";
+  let firstName = "";
+  let lastName = "";
   let email = "";
   let password = "";
   let confirmPassword = "";
   let loading = false;
   let error = "";
 
-  async function handleRegister() {
-    if (!name || !email || !password || !confirmPassword) {
+  async function handleRegister(e) {
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
       error = "Please fill in all fields";
       return;
     }
@@ -30,16 +40,38 @@
     loading = true;
     error = "";
 
-    const result = await user.register(email, password, name);
+    const data = new FormData(e.currentTarget);
 
-    if (result.success) {
-      dispatch("success");
+    const signUpPayload = {
+      first_name: data.get("firstName"),
+      last_name: data.get("lastName"),
+      email: data.get("email"),
+      password: data.get("password"),
+      role: "ROLE_PATIENT",
+    };
+
+    const result = await user.register(signUpPayload);
+
+    if (result?.code === 200) {
+      const redirectPath =
+        result?.data?.user?.role === "ROLE_PATIENT"
+          ? PATIENT_ROUTES.dashboard.url
+          : result?.data?.user?.role === "ROLE_RECEPTIONIST"
+            ? RECEPTIONIST_ROUTES.dashboard.url
+            : result?.data?.user?.role === "ROLE_DOCTOR"
+              ? DOCTORS_ROUTES.dashboard.url
+              : null;
+
+      goto(redirectPath);
     } else {
-      error = result.error;
+      loading = false;
+      error = "Please enter a valid credentials!";
     }
-
-    loading = false;
   }
+
+  const gotoLogin = () => {
+    goto(AUTH_ROUTES.login.url);
+  };
 </script>
 
 <div
@@ -54,12 +86,25 @@
 
         <form on:submit|preventDefault={handleRegister} class="space-y-4">
           <label class="label">
-            <span>Full Name</span>
+            <span>First Name</span>
             <input
               class="input"
               type="text"
-              bind:value={name}
-              placeholder="Enter your full name"
+              name="firstName"
+              bind:value={firstName}
+              placeholder="Enter your first name"
+              disabled={loading}
+            />
+          </label>
+
+          <label class="label">
+            <span>Last Name</span>
+            <input
+              class="input"
+              type="text"
+              name="lastName"
+              bind:value={lastName}
+              placeholder="Enter your Last name"
               disabled={loading}
             />
           </label>
@@ -69,6 +114,7 @@
             <input
               class="input"
               type="email"
+              name="email"
               bind:value={email}
               placeholder="Enter your email"
               disabled={loading}
@@ -80,6 +126,7 @@
             <input
               class="input"
               type="password"
+              name="password"
               bind:value={password}
               placeholder="Enter your password"
               disabled={loading}
@@ -91,6 +138,7 @@
             <input
               class="input"
               type="password"
+              name="confirmPassword"
               bind:value={confirmPassword}
               placeholder="Confirm your password"
               disabled={loading}
@@ -105,19 +153,20 @@
             </aside>
           {/if}
 
-          <footer class="card-footer text-center">
-            <p class="text-sm">
-              Already have an account?
-              <button class="anchor" on:click={() => dispatch("switch-mode")}>
-                Login
-              </button>
-            </p>
-          </footer>
-
           <button type="submit" class="login-button" disabled={loading}>
             {loading ? "Creating Account..." : "Sign Up"}
           </button>
         </form>
+
+        <footer
+          style="display: flex; justify-content: center;"
+          class="card-footer text-center"
+        >
+          <p class="text-sm">
+            Already have an account?
+            <button class="anchor" on:click={() => gotoLogin()}> Login </button>
+          </p>
+        </footer>
       </section>
     </div>
   </div>

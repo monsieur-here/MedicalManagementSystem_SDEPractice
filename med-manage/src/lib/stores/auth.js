@@ -83,8 +83,8 @@ function createUserStore() {
 
         const userData = await response.json();
 
-        if (browser) {
-          localStorage.setItem("token", userData.token);
+        if (browser && userData?.data?.user?.email) {
+          localStorage.setItem("user_data", JSON.stringify(userData.data.user));
         }
 
         set({
@@ -92,7 +92,7 @@ function createUserStore() {
           user: userData?.data?.user,
           loading: false,
         });
-        return { success: true };
+        return userData;
       } catch (error) {
         return { success: false, error: error.message };
       }

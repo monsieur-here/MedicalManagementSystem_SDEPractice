@@ -1,4 +1,6 @@
 <script>
+  import { goto } from "$app/navigation";
+  import { AUTH_ROUTES } from "$lib/routes";
   import { user } from "$lib/stores/auth.js";
   import { createEventDispatcher } from "svelte";
 
@@ -28,6 +30,10 @@
 
     loading = false;
   }
+
+  const gotoSignUp = () => {
+    goto(AUTH_ROUTES.register.url);
+  };
 </script>
 
 <div
@@ -74,19 +80,22 @@
             </aside>
           {/if}
 
-          <footer class="card-footer text-center">
-            <p class="text-sm">
-              Don't have an account?
-              <button class="anchor" on:click={() => dispatch("switch-mode")}>
-                Sign up
-              </button>
-            </p>
-          </footer>
-
           <button type="submit" class="login-button" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        <footer
+          style="display: flex; justify-content: center;"
+          class="card-footer text-center"
+        >
+          <p class="text-sm">
+            Don't have an account?
+            <button class="anchor" on:click={() => gotoSignUp()}>
+              Sign up
+            </button>
+          </p>
+        </footer>
       </section>
     </div>
   </div>

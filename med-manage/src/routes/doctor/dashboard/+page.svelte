@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import { getDoctorsAppointment } from "../../../apis/doctor/appointment";
   import { BASE_API_URL } from "$lib/config";
+  import DoctorAppointment from "$lib/components/DoctorAppointment.svelte";
 
   let page = 1;
   let pageSize = 20;
@@ -45,6 +46,16 @@
           <span class="label">Doctor's Specialisation:</span>
           <span class="value">{appointment?.doctor?.specialization}</span>
         </div>
+
+        {#if appointment?.appointment?.appointmentDate}
+          <div>
+            <span class="label">Appointment Date:</span>
+            <span class="value"
+              >{appointment?.appointment?.appointmentDate}</span
+            >
+          </div>
+        {/if}
+
         <div>
           <span class="label">Appointment note:</span>
           <span class="value">{appointment?.appointment?.notes}</span>
@@ -52,6 +63,10 @@
         <div>
           <span class="label">Appointment status:</span>
           <span class="value">{appointment?.appointment?.status}</span>
+        </div>
+
+        <div>
+          <DoctorAppointment />
         </div>
       </div>
     {/each}

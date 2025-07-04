@@ -1,10 +1,12 @@
 package com.mms.servlet;
 
 import com.google.gson.Gson;
-import com.mms.dao.AppointmentDAO;
-import com.mms.dao.AppointmentDAOImpl;
+import com.mms.dao.*;
 import com.mms.model.Appointment;
+import com.mms.model.AppointmentDetails;
 import com.mms.model.ReceptionistApiResponse;
+import com.mms.model.User;
+import com.mms.utils.DBConnection;
 import com.mms.utils.GsonTimeUtility;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -29,10 +31,16 @@ public class ReceptionistAppointmentServlet extends HttpServlet
 {
     private AppointmentDAO appointmentDAO;
     private Gson gson;
+    private UserDAO userDAO;
 
     @Override
     public void init() throws ServletException {
         this.appointmentDAO = new AppointmentDAOImpl();
+        try {
+            userDAO = new UserDAO(DBConnection.getConnection());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         this.gson = GsonTimeUtility.getGson();
     }
 
@@ -46,8 +54,20 @@ public class ReceptionistAppointmentServlet extends HttpServlet
         ReceptionistApiResponse apiResponse;
         try {
             List<Appointment> appointments = appointmentDAO.getAllAppointmentsForReceptionist();
+            List<AppointmentDetails> detailedAppointments = new ArrayList<>();
+
+            for (Appointment appointment : appointments) {
+                int patientId = appointment.getPatientId();
+                int doctorId = appointment.getDoctorId();
+
+                User patient = userDAO.getUserById(patientId);
+                User doctor = userDAO.getDoctorById(doctorId);
+
+                AppointmentDetails details = new AppointmentDetails(appointment, patient, doctor);
+                detailedAppointments.add(details);
+            }
             Map<String, Object> data = new HashMap<>();
-            data.put("appointments", appointments);
+            data.put("appointments", detailedAppointments);
 
             apiResponse = new ReceptionistApiResponse("Appointments fetched successfully for receptionist", 200, data);
 
@@ -78,7 +98,7 @@ public class ReceptionistAppointmentServlet extends HttpServlet
             }
             Map<String, Object> requestData = gson.fromJson(sb.toString(), Map.class);
 
-            Object idObj = requestData.get("appointmentId");
+            Object idObj = requestData.get("appointment_id");
             String status = (String) requestData.get("status");
             String appointmentDateStr = (String) requestData.get("appointment_date");
 

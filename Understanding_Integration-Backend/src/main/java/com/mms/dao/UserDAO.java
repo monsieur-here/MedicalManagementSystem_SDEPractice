@@ -1,8 +1,11 @@
 package com.mms.dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mms.model.Patient;
+import com.mms.model.Prescription;
 import com.mms.model.User;
 import com.mms.utils.DBConnection;
 
@@ -103,4 +106,60 @@ public class UserDAO {
 		return null;
 	}
 
+	public List<User> getAllDoctors() throws SQLException {
+		List<User> list = new ArrayList<>();
+		String sql = "SELECT * FROM users WHERE role= 'ROLE_DOCTOR'";
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				User user = new User();
+				user.setEmail(rs.getString("email"));
+				user.setRole(rs.getString("role"));
+				user.setSpecialization(rs.getString("specialization"));
+				user.setFirstName(rs.getString("first_name"));
+				user.setLastName(rs.getString("last_name"));
+
+				list.add(user);
+			}
+		}
+		return list;
+	}
+
+	public User getUserById(int patientId) throws SQLException {
+		User user = null;
+		String sql = "SELECT * FROM users WHERE id = ?";
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, patientId);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				user = new User();
+				user.setId(rs.getInt("id"));
+				user.setFirstName(rs.getString("first_name"));
+				user.setLastName(rs.getString("last_name"));
+				user.setEmail(rs.getString("email"));
+				user.setRole(rs.getString("role"));
+			}
+		}
+		return user;
+	}
+
+	public User getDoctorById(int doctorId) throws SQLException {
+		User user = null;
+		String sql = "SELECT * FROM users WHERE id = ?";
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, doctorId);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				user = new User();
+				user.setId(rs.getInt("id"));
+				user.setFirstName(rs.getString("first_name"));
+				user.setLastName(rs.getString("last_name"));
+				user.setEmail(rs.getString("email"));
+				user.setRole(rs.getString("role"));
+				user.setSpecialization(rs.getString("specialization"));
+			}
+		}
+		return user;
+	}
 }

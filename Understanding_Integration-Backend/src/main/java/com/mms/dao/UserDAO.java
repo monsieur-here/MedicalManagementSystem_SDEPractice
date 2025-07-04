@@ -119,6 +119,7 @@ public class UserDAO {
 				user.setSpecialization(rs.getString("specialization"));
 				user.setFirstName(rs.getString("first_name"));
 				user.setLastName(rs.getString("last_name"));
+				user.setId(rs.getInt("id"));
 
 				list.add(user);
 			}

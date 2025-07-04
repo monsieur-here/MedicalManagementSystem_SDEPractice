@@ -1,6 +1,7 @@
 package com.mms.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.sql.Date;
 
 //	private int AppointmentId; 
 //	private int userId;
@@ -16,54 +17,49 @@ import java.util.Date;
 //	private String status;
 	
 	public class Appointment {
-		private int id;
-	    private Date slot;
-	    private Integer patientId;
-	    private String patientName;
-	    private String visitDescription;
-	    private Integer doctorId;
-	    private String doctorName;
-	    private String specialist;	// can be null for Receptionists
-	    private String status;
-
+		private Integer id;
+		private Integer slot;
+		private Integer patientId;
+		private Integer doctorId;
 		private String notes;
+	    private String status;
+		private Date appointmentDate;
+
+//		private int appointmentId;
+//	    private Date slot;
+//	    private Integer patientId;
+//	    private String patientName;
+//	    private String visitDescription;
+//	    private Integer doctorId;
+//	    private String doctorName;
+//	    private String specialist;	// can be null for Receptionists
+//	    private String status;
 
 	    public Appointment() {}
 
-		public Appointment(int id, Date slot, Integer patientId, String patientName, String visitDescription, Integer doctorId, String doctorName, String specialist, String status, String notes) {
+		public Appointment(Integer id, Integer slot, Integer patientId, Integer doctorId, String notes, String status, Date appointmentDate) {
 			this.id = id;
 			this.slot = slot;
 			this.patientId = patientId;
-			this.patientName = patientName;
-			this.visitDescription = visitDescription;
 			this.doctorId = doctorId;
-			this.doctorName = doctorName;
-			this.specialist = specialist;
+			this.notes = notes;
 			this.status = status;
-			this.notes = notes;
+			this.appointmentDate = appointmentDate;
 		}
 
-		public String getNotes() {
-			return notes;
-		}
-
-		public void setNotes(String notes) {
-			this.notes = notes;
-		}
-
-		public int getId() {
+		public Integer getId() {
 			return id;
 		}
 
-		public void setId(int id) {
+		public void setId(Integer id) {
 			this.id = id;
 		}
 
-		public Date getSlot() {
+		public Integer getSlot() {
 			return slot;
 		}
 
-		public void setSlot(Date slot) {
+		public void setSlot(Integer slot) {
 			this.slot = slot;
 		}
 
@@ -75,22 +71,6 @@ import java.util.Date;
 			this.patientId = patientId;
 		}
 
-		public String getPatientName() {
-			return patientName;
-		}
-
-		public void setPatientName(String patientName) {
-			this.patientName = patientName;
-		}
-
-		public String getVisitDescription() {
-			return visitDescription;
-		}
-
-		public void setVisitDescription(String visitDescription) {
-			this.visitDescription = visitDescription;
-		}
-
 		public Integer getDoctorId() {
 			return doctorId;
 		}
@@ -99,20 +79,12 @@ import java.util.Date;
 			this.doctorId = doctorId;
 		}
 
-		public String getDoctorName() {
-			return doctorName;
+		public String getNotes() {
+			return notes;
 		}
 
-		public void setDoctorName(String doctorName) {
-			this.doctorName = doctorName;
-		}
-
-		public String getSpecialist() {
-			return specialist;
-		}
-
-		public void setSpecialist(String specialist) {
-			this.specialist = specialist;
+		public void setNotes(String notes) {
+			this.notes = notes;
 		}
 
 		public String getStatus() {
@@ -123,9 +95,11 @@ import java.util.Date;
 			this.status = status;
 		}
 
-	    // Getters and Setters
-	    
+		public Date getAppointmentDate() {
+			return appointmentDate;
+		}
 
-	    // Constructors
-	    
-}
+		public void setAppointmentDate(Date appointmentDate) {
+			this.appointmentDate = appointmentDate;
+		}
+	}

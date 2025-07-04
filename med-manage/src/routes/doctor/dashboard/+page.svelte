@@ -1,16 +1,16 @@
 <script>
   import { DOCTORS_ROUTES } from "$lib/routes";
   import { onMount } from "svelte";
-  import { getPrescription } from "../../../apis/doctor/prescription";
+  import { getDoctorsAppointment } from "../../../apis/doctor/appointment";
   import { BASE_API_URL } from "$lib/config";
 
   let page = 1;
   let pageSize = 20;
 
-  let prescriptionData = [];
+  let appointmentData = [];
 
   onMount(async () => {
-    prescriptionData = await getPrescription();
+    appointmentData = await getDoctorsAppointment();
   });
 </script>
 
@@ -22,24 +22,30 @@
 
 <div class="dashboard">
   <div class="prescription-container">
-    {#each prescriptionData as presc}
+    {#each appointmentData as appointment}
       <div class="prescription-card">
-        <div class="prescription-title">{presc.prescriptionName}</div>
+        <div class="prescription-title">{appointment.prescriptionName}</div>
+
         <div>
-          <span class="label">Medication:</span>
-          <span class="value">{presc.medication}</span>
+          <span class="label">Patient:</span>
+          <span class="value"
+            >{`${appointment?.patient?.first_name} ${appointment?.patient?.last_name}`}</span
+          >
+        </div>
+
+        <div>
+          <span class="label">Doctor:</span>
+          <span class="value"
+            >{`${appointment?.doctor?.first_name} ${appointment?.doctor?.last_name}`}</span
+          >
         </div>
         <div>
-          <span class="label">Dosage:</span>
-          <span class="value">{presc.dosage}</span>
+          <span class="label">Doctor's Specialisation:</span>
+          <span class="value">{appointment?.doctor?.specialization}</span>
         </div>
         <div>
-          <span class="label">Frequency:</span>
-          <span class="value">{presc.frequency}</span>
-        </div>
-        <div>
-          <span class="label">Criticality:</span>
-          <span class="value">{presc.criticality}</span>
+          <span class="label">Appointment status:</span>
+          <span class="value">{appointment?.appointment?.status}</span>
         </div>
       </div>
     {/each}

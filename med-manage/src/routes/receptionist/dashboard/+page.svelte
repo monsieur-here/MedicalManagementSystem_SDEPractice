@@ -2,13 +2,42 @@
   import { RECEPTIONIST_ROUTES } from "$lib/routes";
   import { handleLogOut } from "$lib/utils";
   import { onMount } from "svelte";
-  import { getReceptionistAppointment } from "../../../apis/receptionist/appointment";
+  import {
+    getReceptionistAppointment,
+    putReceptionistAppointment,
+  } from "../../../apis/receptionist/appointment";
 
   let appointmentData = [];
+  let selectedDateTime = "";
 
   onMount(async () => {
     appointmentData = await getReceptionistAppointment();
   });
+
+  function handleChange(event, app) {
+    selectedDateTime = event.target.value;
+
+    const [date, time] = selectedDateTime.split("T");
+    const formattedDateTime = `${date} ${time}:00`;
+
+    // put api call ...
+    const payload = {
+      appointment_id: app?.appointment?.id,
+      appointment_date: formattedDateTime,
+      status: "SCHEDULED",
+    };
+
+    handlePutApp(payload);
+  }
+
+  const handlePutApp = async (payload) => {
+    const updateApp = await putReceptionistAppointment(payload);
+
+    if (updateApp?.data === 200) {
+      alert("Appointment has been updated!");
+      appointmentData = await getReceptionistAppointment();
+    }
+  };
 </script>
 
 <div>
@@ -22,11 +51,64 @@
     <div class="prescription-container">
       {#each appointmentData as appointment}
         <div class="prescription-card">
-          <div class="prescription-title">{appointment?.medication}</div>
-          <div>
-            <span class="label">Prescription Name:</span>
-            <span class="value">{appointment?.status}</span>
+          <div class="prescription-title">
+            {appointment?.patient?.first_name +
+              " " +
+              appointment?.patient?.last_name}
           </div>
+
+          {#if appointment?.appointment?.appointmentDate}
+            <div>
+              <span class="label">Appointment Date:</span>
+              <span class="value"
+                >{appointment?.appointment?.appointmentDate}</span
+              >
+            </div>
+          {/if}
+
+          {#if appointment?.doctor?.first_name}
+            <div>
+              <span class="label">Doctor:</span>
+              <span class="value"
+                >{appointment?.doctor?.first_name ??
+                  "" + " " + appointment?.doctor?.last_name ??
+                  ""}</span
+              >
+            </div>
+          {/if}
+
+          {#if appointment?.appointment?.notes}
+            <div>
+              <span class="label">Appointment Notes:</span>
+              <span class="value">{appointment?.appointment?.notes}</span>
+            </div>
+          {/if}
+
+          <div>
+            <span class="label">Appointment status:</span>
+            <span class="value">{appointment?.appointment?.status}</span>
+          </div>
+
+          {#if !appointment?.appointment?.appointmentDate}
+            <div>
+              <label>
+                Select Date & Time:
+                <input
+                  type="datetime-local"
+                  on:change={(e) => handleChange(e, appointment)}
+                />
+              </label>
+            </div>
+          {:else}
+            <div>
+              <span class="label">Appointment status:</span>
+              <span class="value"
+                >{new Date(
+                  appointment?.appointment?.appointmentDate
+                ).toLocaleString()}</span
+              >
+            </div>
+          {/if}
         </div>
       {/each}
     </div>

@@ -52,19 +52,10 @@
       {#each appointmentData as appointment}
         <div class="prescription-card">
           <div class="prescription-title">
-            {appointment?.patient?.first_name +
+            Patient: {appointment?.patient?.first_name +
               " " +
               appointment?.patient?.last_name}
           </div>
-
-          {#if appointment?.appointment?.appointmentDate}
-            <div>
-              <span class="label">Appointment Date:</span>
-              <span class="value"
-                >{appointment?.appointment?.appointmentDate}</span
-              >
-            </div>
-          {/if}
 
           {#if appointment?.doctor?.first_name}
             <div>
@@ -73,6 +64,15 @@
                 >{appointment?.doctor?.first_name ??
                   "" + " " + appointment?.doctor?.last_name ??
                   ""}</span
+              >
+            </div>
+          {/if}
+
+          {#if appointment?.appointment?.appointmentDate}
+            <div>
+              <span class="label">Appointment Date:</span>
+              <span class="value"
+                >{appointment?.appointment?.appointmentDate}</span
               >
             </div>
           {/if}

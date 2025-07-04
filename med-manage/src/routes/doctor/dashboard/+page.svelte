@@ -4,6 +4,7 @@
   import { getDoctorsAppointment } from "../../../apis/doctor/appointment";
   import { BASE_API_URL } from "$lib/config";
   import DoctorAppointment from "$lib/components/DoctorAppointment.svelte";
+  import { handleLogOut } from "$lib/utils";
 
   let page = 1;
   let pageSize = 20;

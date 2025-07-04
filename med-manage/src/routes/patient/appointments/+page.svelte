@@ -5,45 +5,9 @@
   import { onMount } from "svelte";
   import { createAppointment } from "../../../apis/patient/appointment";
   import { handleLogOut } from "$lib/utils";
+  import { getDoctorsList } from "../../../apis/doctor/appointment";
 
-  let doctors = [
-    {
-      id: 16,
-      name: "Dr. Smith",
-      specialty: "Cardiologist",
-      schedule: ["2025-06-10 10:00", "2025-06-20 14:00", "2025-06-21 09:00"],
-    },
-    {
-      id: 2,
-      name: "Dr. Jane Doe",
-      specialty: "Dermatologist",
-      schedule: ["2025-06-10 11:00", "2025-06-12 15:00"],
-    },
-    {
-      id: 3,
-      name: "Dr. Dane Marsch",
-      specialty: "Cardiologist",
-      schedule: ["2025-06-10 11:00", "2025-06-12 15:00"],
-    },
-    {
-      id: 4,
-      name: "Dr. Peter Smith",
-      specialty: "Dermatologist",
-      schedule: ["2025-06-10 11:00", "2025-06-12 15:00"],
-    },
-    {
-      id: 5,
-      name: "Dr. Andrea Backer",
-      specialty: "General Physician",
-      schedule: ["2025-06-10 11:00", "2025-06-12 15:00"],
-    },
-    {
-      id: 6,
-      name: "Dr. Daniel Christian",
-      specialty: "Neurologist",
-      schedule: ["2025-06-10 11:00", "2025-06-12 15:00"],
-    },
-  ];
+  let doctors = [];
 
   let selectedDoctor = "";
   let selectedTime = "";
@@ -57,8 +21,9 @@
 
   let loginUser = null;
 
-  onMount(() => {
+  onMount(async () => {
     loginUser = JSON.parse(window.localStorage.getItem("user_data"));
+    doctors = await getDoctorsList();
   });
 
   async function handleBooking(e) {
@@ -112,7 +77,13 @@
     <select bind:value={specialist} name="specialist" required>
       <option value="" disabled selected>Select Specialist</option>
       {#each doctors as doc (doc.id)}
-        <option value={doc.id}>{`${doc.name} (${doc.specialty})`}</option>
+        <option value={doc.id}
+          >{doc.firstName +
+            " " +
+            doc.lastName +
+            " | " +
+            doc.specialization}</option
+        >
       {/each}
     </select>
   </div>

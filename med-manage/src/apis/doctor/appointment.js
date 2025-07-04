@@ -25,3 +25,25 @@ export const getDoctorsAppointment = async (payload) => {
     return error;
   }
 };
+
+// Doctor: GET: get doctors
+export const getDoctorsList = async () => {
+  const myHeaders = new Headers();
+  myHeaders.append("Cookie", "JSESSIONID=9D61B8DF14A896C123E4FEA0A8EA4F36");
+
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  try {
+    const response = await fetch(BASE_API_URL + "/doctors", requestOptions);
+    const result = await response.text();
+
+    return JSON.parse(result)?.data?.doctors;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};

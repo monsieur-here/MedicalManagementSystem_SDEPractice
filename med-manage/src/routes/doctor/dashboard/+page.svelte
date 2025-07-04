@@ -33,15 +33,21 @@
           >
         </div>
 
-        <div>
-          <span class="label">Doctor:</span>
-          <span class="value"
-            >{`${appointment?.doctor?.first_name} ${appointment?.doctor?.last_name}`}</span
-          >
-        </div>
+        {#if appointment?.doctor?.first_name}
+          <div>
+            <span class="label">Doctor:</span>
+            <span class="value"
+              >{`${appointment?.doctor?.first_name} ${appointment?.doctor?.last_name}`}</span
+            >
+          </div>
+        {/if}
         <div>
           <span class="label">Doctor's Specialisation:</span>
           <span class="value">{appointment?.doctor?.specialization}</span>
+        </div>
+        <div>
+          <span class="label">Appointment note:</span>
+          <span class="value">{appointment?.appointment?.notes}</span>
         </div>
         <div>
           <span class="label">Appointment status:</span>

@@ -304,7 +304,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         appointment.setPatientId(rs.getInt("patient_id"));
         appointment.setDoctorId(rs.getInt("doctor_id"));
         appointment.setStatus(rs.getString("status"));
-//        appointment.setAppointmentDate(rs.getDate("appointment_date"));
+        appointment.setAppointmentDate(rs.getDate("appointment_date"));
 
         return appointment;
     }
@@ -364,7 +364,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     @Override
     public List<Appointment> getAllAppointmentsForReceptionist() throws SQLException {
         List<Appointment> appointments = new ArrayList<>();
-        String sql = "SELECT * FROM appointments where status = 'REQUESTED'";
+        String sql = "SELECT * FROM appointments";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);

@@ -11,21 +11,24 @@ public class User {
 	private String firstName;
 	@SerializedName("last_name")
 	private String lastName;
+	private String specialization;
+
 	
 	
 	public User() {
 		super();
 	}
-	public User(int id, String email, String password, String role, String firstName, String lastName) {
-		super();
+
+	public User(int id, String email, String password, String role, String firstName, String lastName, String specialization) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.role = role;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.specialization = specialization;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -62,9 +65,12 @@ public class User {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	
-	
 
-	
+	public String getSpecialization() {
+		return specialization;
+	}
 
+	public void setSpecialization(String specialization) {
+		this.specialization = specialization;
+	}
 }

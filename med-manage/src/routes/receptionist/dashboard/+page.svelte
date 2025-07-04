@@ -33,7 +33,7 @@
   const handlePutApp = async (payload) => {
     const updateApp = await putReceptionistAppointment(payload);
 
-    if (updateApp?.data === 200) {
+    if (updateApp?.code === 200) {
       alert("Appointment has been updated!");
       appointmentData = await getReceptionistAppointment();
     }

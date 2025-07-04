@@ -103,8 +103,6 @@
     min-width: 200px;
   }
   input {
-    width: 90%;
-    padding: 0.7rem;
     margin-bottom: 1rem;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -114,7 +112,6 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #fff;
-    font-size: 1rem;
   }
   .toggle-btn {
     background: #007acc;

@@ -10,9 +10,13 @@
 
   let appointmentData = [];
 
-  onMount(async () => {
-    appointmentData = await getDoctorsAppointment();
+  onMount(() => {
+    hydrateRecords();
   });
+
+  const hydrateRecords = async () => {
+    appointmentData = await getDoctorsAppointment();
+  };
 </script>
 
 <div class="header">
@@ -42,6 +46,7 @@
             >
           </div>
         {/if}
+
         <div>
           <span class="label">Doctor's Specialisation:</span>
           <span class="value">{appointment?.doctor?.specialization}</span>
@@ -60,13 +65,14 @@
           <span class="label">Appointment note:</span>
           <span class="value">{appointment?.appointment?.notes}</span>
         </div>
+
         <div>
           <span class="label">Appointment status:</span>
           <span class="value">{appointment?.appointment?.status}</span>
         </div>
 
         <div>
-          <DoctorAppointment />
+          <DoctorAppointment {appointment} {hydrateRecords} />
         </div>
       </div>
     {/each}

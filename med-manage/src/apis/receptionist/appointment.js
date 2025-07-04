@@ -19,7 +19,8 @@ export const getReceptionistAppointment = async () => {
       requestOptions
     );
     const result = await response.text();
-    return result;
+
+    return JSON.parse(result)?.data?.appointments;
   } catch (error) {
     console.error(error);
     return error;

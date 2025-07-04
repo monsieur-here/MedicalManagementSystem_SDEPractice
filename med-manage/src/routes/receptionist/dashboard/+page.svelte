@@ -18,10 +18,32 @@
     <button class="logout-button" on:click={handleLogOut}>Logout</button>
   </div>
 
-  <div></div>
+  <div class="dashboard">
+    <div class="prescription-container">
+      {#each appointmentData as appointment}
+        <div class="prescription-card">
+          <div class="prescription-title">{appointment?.medication}</div>
+          <div>
+            <span class="label">Prescription Name:</span>
+            <span class="value">{appointment?.status}</span>
+          </div>
+        </div>
+      {/each}
+    </div>
+  </div>
 </div>
 
 <style>
+  .dashboard {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    background-color: #f1f1f1;
+    font-family: Arial, sans-serif;
+  }
+
   .header {
     display: flex;
     justify-content: space-between;
@@ -58,5 +80,49 @@
   }
   .logout-button:hover {
     background-color: #c82333;
+  }
+
+  .prescription-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .prescription-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1rem;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease;
+    cursor: pointer;
+  }
+
+  .prescription-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .prescription-card div {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .prescription-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    color: #333;
+  }
+
+  .label {
+    font-weight: 500;
+    color: #555;
+  }
+
+  .value {
+    font-weight: 400;
+    color: #222;
   }
 </style>

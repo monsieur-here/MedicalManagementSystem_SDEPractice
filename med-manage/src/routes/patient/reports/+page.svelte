@@ -4,17 +4,28 @@
   import { handleLogOut } from "$lib/utils";
 
   const reports = [
-    { id: 1, title: "Blood Test", date: "2025-05-15" },
-    { id: 2, title: "X-Ray Chest", date: "2025-05-20" },
-    { id: 3, title: "MRI Brain", date: "2025-05-25" },
-  ];
+    {
+      id: 1,
+      title: "Blood Test",
+      date: "2025-05-15",
+      content:
+        "Complete blood count is within normal range. No signs of infection or anemia.",
+    },
+    {
+      id: 2,
+      title: "X-Ray Chest",
+      date: "2025-05-20",
+      content:
+        "Mild inflammation detected in the lower left lung. Follow-up recommended.",
+    },
+    {
+      id: 3,
+      title: "MRI Brain",
+      date: "2025-05-25",
 
-  /**
-   * @param {number} id
-   */
-  function viewReport(id) {
-    goto(`/dashboard/reports/${id}`);
-  }
+      content: "No abnormalities found. Brain structure appears normal.",
+    },
+  ];
 </script>
 
 <div class="header">
@@ -24,13 +35,25 @@
 </div>
 
 <div class="dashboard">
-  <ul class="list">
+  <div class="prescription-container">
     {#each reports as report}
-      <li style="text-align: center;" on:click={() => viewReport(report.id)}>
-        <strong>{report.title}</strong> — {report.date}
-      </li>
+      <div class="prescription-card">
+        <div class="prescription-title">{report.title}</div>
+        <div>
+          <span class="label">Prescription Name:</span>
+          <span class="value">{report?.title}</span>
+        </div>
+        <div>
+          <span class="label">date:</span>
+          <span class="value">{report?.date}</span>
+        </div>
+        <div>
+          <span class="label">Content:</span>
+          <span class="value">{report?.content}</span>
+        </div>
+      </div>
     {/each}
-  </ul>
+  </div>
 </div>
 
 <style>
@@ -43,23 +66,7 @@
     background-color: #f1f1f1;
     font-family: Arial, sans-serif;
   }
-  .list {
-    list-style: none;
-    padding: 0;
-    max-width: 400px;
-    margin: 1rem auto;
-  }
-  .list li {
-    padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    margin-bottom: 0.5rem;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .list li:hover {
-    background-color: #f0f8ff;
-  }
+
   button {
     display: block;
     margin: 2rem auto 0;
@@ -111,5 +118,49 @@
 
   .logout-button:hover {
     background-color: #c82333;
+  }
+
+  .prescription-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .prescription-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1rem;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease;
+    cursor: pointer;
+  }
+
+  .prescription-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .prescription-card div {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .prescription-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    color: #333;
+  }
+
+  .label {
+    font-weight: 500;
+    color: #555;
+  }
+
+  .value {
+    font-weight: 400;
+    color: #222;
   }
 </style>

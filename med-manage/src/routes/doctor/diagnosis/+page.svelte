@@ -82,7 +82,7 @@
 </script>
 
 <div class="header">
-  <a href={DOCTORS_ROUTES.diagnosis.url} class="home-button">Back</a>
+  <a href={DOCTORS_ROUTES.dashboard.url} class="home-button">Back</a>
   <h1 class="title">🩺 Patient Diagnosis</h1>
   <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>

@@ -3,12 +3,12 @@
   import { goto } from "$app/navigation";
   import { PATIENT_ROUTES } from "$lib/routes";
   import { handleLogOut } from "$lib/utils";
-  import { getPrescription } from "../../../apis/patient/prescription";
+  import { getPatientPrescription } from "../../../apis/patient/prescription";
 
   let prescriptions = [];
 
   onMount(async () => {
-    prescriptions = await getPrescription();
+    prescriptions = await getPatientPrescription();
   });
 </script>
 

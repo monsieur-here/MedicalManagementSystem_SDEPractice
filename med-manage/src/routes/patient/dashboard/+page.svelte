@@ -4,8 +4,6 @@
   import { PATIENT_ROUTES } from "$lib/routes";
   import { handleLogOut } from "$lib/utils";
 
-  $: user_type = $page.url.searchParams.get("user_type");
-
   const user = {
     name: "John Doe",
     patientId: "P123456",

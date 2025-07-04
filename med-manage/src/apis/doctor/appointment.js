@@ -47,3 +47,31 @@ export const getDoctorsList = async () => {
     return error;
   }
 };
+
+// Doctor: POST: add prescriptions
+export const addPrescription = async (payload) => {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const raw = JSON.stringify(payload);
+
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  try {
+    const response = await fetch(
+      BASE_API_URL + "/patient/prescription",
+      requestOptions
+    );
+    const result = await response.text();
+
+    return result;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};

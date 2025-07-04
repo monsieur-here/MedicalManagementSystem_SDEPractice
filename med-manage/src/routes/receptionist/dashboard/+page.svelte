@@ -42,7 +42,7 @@
 
 <div>
   <div class="header">
-    <a href={RECEPTIONIST_ROUTES.dashboard.url} class="home-button">Back</a>
+    <div></div>
     <h1 class="title">🩺 Receptionist Dashboard</h1>
     <button class="logout-button" on:click={handleLogOut}>Logout</button>
   </div>

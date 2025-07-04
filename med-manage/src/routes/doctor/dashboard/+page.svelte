@@ -21,7 +21,7 @@
 </script>
 
 <div class="header">
-  <a href={DOCTORS_ROUTES.dashboard.url} class="home-button">Back</a>
+  <div></div>
   <h1 class="title">🩺 Doctor Dashboard</h1>
   <button class="logout-button" on:click={handleLogOut}>Logout</button>
 </div>

@@ -77,6 +77,10 @@
         </div>
       </div>
     {/each}
+
+    {#if !appointmentData.length}
+      <p>No Records found</p>
+    {/if}
   </div>
 </div>
 
